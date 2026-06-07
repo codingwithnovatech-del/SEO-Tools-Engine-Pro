@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="robots" content="index, follow">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <link rel="stylesheet" href="../assets/css/style.css">
+  <title>Keyword Generator - Free SEO Keyword Ideas Tool</title>
+  <meta name="description" content="Free online keyword generator tool.">
+  <meta property="og:title" content="Keyword Generator - Free SEO Keyword Ideas Tool">
+  <meta property="og:description" content="Free online keyword generator tool.">
+  <meta property="og:url" content="https://seotoolsengine.com/tools/keyword-generator.html">
+  <meta property="og:type" content="website">
+  <meta name="twitter:card" content="summary_large_image">
+  <link rel="canonical" href="https://seotoolsengine.com/tools/keyword-generator.html">
+</head>
+<body>
+  <nav class="nav">
+    <div class="nav-inner">
+      <a href="/" class="nav-brand"><i class="fas fa-rocket"></i> SEO Agency Pro</a>
+      <div class="nav-links">
+        <a href="/">Home</a>
+        <a href="/#tools">Tools</a>
+        <a href="/#blog">Blog</a>
+        <a href="../about.html">About</a>
+        <a href="../contact.html">Contact</a>
+      </div>
+      <div class="nav-actions">
+        <button class="theme-btn" id="themeBtn" onclick="App.toggleTheme()" aria-label="Theme"><i class="fas fa-sun"></i></button>
+        <button class="menu-btn" onclick="document.querySelector('.nav-links')?.classList.toggle('active')" aria-label="Menu"><i class="fas fa-bars"></i></button>
+      </div>
+    </div>
+  </nav>
+    <div class="tool-page">
+    <div class="tool-container">
+      <div class="tool-box">
+        <h1>Keyword Generator</h1>
+        <p class="desc">Generate hundreds of keyword ideas from a single seed keyword. Our Keyword Generator creates LSI keywords, long-tail variations, and related search terms to help you plan your SEO content strategy.</p>
+        <div class="form-group"><label>Enter Seed Keyword</label><input type="text" id="kwSeed" placeholder="e.g., seo tips" value="seo tips"></div><button class="btn btn-primary" onclick="App.generateKeywords()"><i class="fas fa-key"></i> Generate Keywords</button><div class="result-box" id="kwResult"><div class="result-detail"><strong>Total:</strong> <span id="kwCount">0 keywords</span></div><div id="kwList" style="margin-top:12px"></div></div>
+        <div class="btn-group">
+          <button class="btn btn-secondary" onclick="App.toast('Share link copied!')"><i class="fas fa-share-alt"></i> Share</button>
+        </div>
+      </div>
+      <div class="tool-box">
+        <h3>Keyword Generator - FAQ</h3>
+        <div class="faq"><div class="faq-item"><button class="faq-q">How many keywords can I generate? <i class="fas fa-chevron-down"></i></button><div class="faq-a">You can generate 20+ keyword ideas per seed keyword. Use different seed keywords for more variations.</div></div></div>
+      </div>
+      <div class="tool-box">
+        <h3>Related Tools</h3>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:12px">          <a href='seo-score.html' style='padding:10px;border:1px solid var(--border);border-radius:8px;text-align:center;font-size:0.85rem'>SEO Score Checker</a>
+          <a href='meta-generator.html' style='padding:10px;border:1px solid var(--border);border-radius:8px;text-align:center;font-size:0.85rem'>Meta Tag Generator</a>
+          <a href='word-counter.html' style='padding:10px;border:1px solid var(--border);border-radius:8px;text-align:center;font-size:0.85rem'>Word Counter</a>
+          <a href='sitemap-generator.html' style='padding:10px;border:1px solid var(--border);border-radius:8px;text-align:center;font-size:0.85rem'>Sitemap Generator</a>
+          <a href='robots-generator.html' style='padding:10px;border:1px solid var(--border);border-radius:8px;text-align:center;font-size:0.85rem'>Robots.txt Generator</a>
+          <a href='traffic-checker.html' style='padding:10px;border:1px solid var(--border);border-radius:8px;text-align:center;font-size:0.85rem'>Traffic Checker</a>
+        </div>
+      </div>
+    </div>
+  </div>
+  <footer class="footer">
+    <div class="footer-grid">
+      <div class="footer-col"><h4>SEO Tools Engine Pro</h4><p style="opacity:0.7;font-size:0.85rem">Free professional SEO tools.</p></div>
+      <div class="footer-col"><h4>Tools</h4><ul><li><a href="../tools/seo-score.html">SEO Score</a></li><li><a href="../tools/keyword-generator.html">Keyword Generator</a></li><li><a href="../tools/meta-generator.html">Meta Generator</a></li></ul></div>
+      <div class="footer-col"><h4>Company</h4><ul><li><a href="../about.html">About</a></li><li><a href="../contact.html">Contact</a></li><li><a href="../privacy.html">Privacy</a></li></ul></div>
+    </div>
+    <div class="footer-bottom">&copy; 2026 SEO Tools Engine Pro  Made by Coding with Nova Tech</div>
+  </footer>
+  <div class="toast" id="toast"></div>
+    <script src="../assets/js/main.js"></script>
+      <div class="girl-wrap" id="girlWrap">
+    <div class="girl-3d" id="girl3d">
+      <div class="girl-glow"></div>
+      <div class="girl-ring"></div>
+      <img class="girl-avatar" id="girlAvatar" src="https://i.ibb.co/4ZXZGR0v/magnific-character-design-sheet-cu-y6q-MDQAPW9.png" alt="Support">
+      <div class="girl-badge"><i class="fas fa-headset"></i></div>
+    </div>
+    <div class="girl-shadow"></div>
+  </div>
+  <div class="girl-speech" id="girlSpeech">
+    <div class="speech-msg" id="girlSpeechMsg">Hi! I'm Priya, your support assistant! ?????</div>
+  </div>
+<script>if("serviceWorker"in navigator){navigator.serviceWorker.register("/SEO-Tools-Engine-Pro/sw.js")}</script></body>
+</html>

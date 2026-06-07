@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Format and beautify unformatted HTML code for better readability.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <link rel="stylesheet" href="../assets/css/style.css">
+  <title>HTML Formatter - Free SEO Tool</title>
+  <meta name="description" content="Format and beautify unformatted HTML code for better readability.">
+  <meta property="og:title" content="HTML Formatter - Free SEO Tool">
+  <meta property="og:description" content="Format and beautify unformatted HTML code for better readability.">
+  <meta property="og:url" content="https://seotoolsengine.com/tools/html-formatter.html">
+  <meta property="og:type" content="website">
+  <meta name="twitter:card" content="summary_large_image">
+  <link rel="canonical" href="https://seotoolsengine.com/tools/html-formatter.html">
+  <style>
+    .traffic-card { background: var(--card-bg); border: 1px solid var(--border); border-radius: 12px; padding: 20px; margin-bottom: 16px; }
+    .traffic-card h3 { font-size: 1rem; margin-bottom: 12px; display: flex; align-items: center; gap: 8px; }
+    .traffic-stat { display: flex; justify-content: space-between; align-items: center; padding: 10px 0; border-bottom: 1px solid var(--border); }
+    .traffic-stat:last-child { border-bottom: none; }
+    .traffic-stat .label { color: var(--text-secondary); font-size: 0.85rem; }
+    .traffic-stat .value { font-weight: 600; font-size: 1.1rem; }
+    .traffic-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+    .traffic-metric { text-align: center; padding: 16px; background: var(--bg-secondary); border-radius: 10px; }
+    .traffic-metric .num { font-size: 1.5rem; font-weight: 700; color: var(--accent); }
+    .traffic-metric .lbl { font-size: 0.8rem; color: var(--text-secondary); margin-top: 4px; }
+    .traffic-input { width: 100%; padding: 12px; border: 1px solid var(--border); border-radius: 8px; background: var(--card-bg); color: var(--text); font-family: monospace; font-size: 0.9rem; resize: vertical; }
+    .traffic-input:focus { outline: none; border-color: var(--accent); }
+    .traffic-meter { height: 8px; background: var(--border); border-radius: 4px; margin: 8px 0; overflow: hidden; }
+    .traffic-meter-bar { height: 100%; border-radius: 4px; transition: width 1s ease; }
+    .ad-container { margin: 20px 0; padding: 16px; background: var(--bg-secondary); border-radius: 12px; text-align: center; min-height: 90px; display: flex; align-items: center; justify-content: center; }
+    .ad-label { font-size: 0.7rem; color: var(--text-secondary); margin-bottom: 4px; }
+    @media (max-width:600px) { .traffic-grid { grid-template-columns: 1fr; } }
+  </style>
+</head>
+<body>
+  <nav class="nav">
+    <div class="nav-inner">
+      <a href="/" class="nav-brand"><i class="fas fa-rocket"></i> SEO Agency Pro</a>
+      <div class="nav-links">
+        <a href="/">Home</a>
+        <a href="/tools/">Tools</a>
+        <a href="/#blog">Blog</a>
+        <a href="../about.html">About</a>
+        <a href="../contact.html">Contact</a>
+      </div>
+      <div class="nav-actions">
+        <button class="theme-btn" id="themeBtn" onclick="App.toggleTheme()" aria-label="Theme"><i class="fas fa-sun"></i></button>
+        <button class="menu-btn" onclick="document.querySelector('.nav-links')?.classList.toggle('active')" aria-label="Menu"><i class="fas fa-bars"></i></button>
+      </div>
+    </div>
+  </nav>
+  <div class="tool-page">
+    <div class="tool-container">
+      <div class="tool-box">
+        <h1><i class="fas fa-code" style="color:var(--accent)"></i> HTML Formatter</h1>
+        <p class="desc">Format and beautify unformatted HTML code for better readability.</p>
+        
+        <div class="form-group"><label>Enter Text</label><textarea id="toolInput" class="traffic-input" placeholder="Type or paste your text here..." rows="6"></textarea></div>
+        <button class="btn btn-primary" onclick="runTool()"><i class="fas fa-play"></i> Run Tool</button>
+        <div id="toolOutput" style="margin-top:20px;display:none"></div>
+      </div>
+      <!-- AdSense Slot -->
+      <div class="ad-container">
+        <div class="ad-label">— Advertisement —</div>
+        <div style="font-size:0.9rem;color:var(--text-secondary)">Ad Unit (300x250)</div>
+      </div>
+      <div class="tool-box"><h3>More Developer Tools</h3><div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:12px"><a href="html-minifier.html" class="btn btn-secondary" style="text-align:center;font-size:0.8rem;padding:8px"><i class="fas fa-compress"></i> HTML Minifier</a><a href="css-minifier.html" class="btn btn-secondary" style="text-align:center;font-size:0.8rem;padding:8px"><i class="fas fa-compress"></i> CSS Minifier</a><a href="js-minifier.html" class="btn btn-secondary" style="text-align:center;font-size:0.8rem;padding:8px"><i class="fas fa-compress"></i> JavaScript Minifier</a><a href="json-formatter.html" class="btn btn-secondary" style="text-align:center;font-size:0.8rem;padding:8px"><i class="fas fa-brackets-curly"></i> JSON Formatter</a><a href="user-agent.html" class="btn btn-secondary" style="text-align:center;font-size:0.8rem;padding:8px"><i class="fas fa-laptop"></i> User Agent Parser</a><a href="password-generator.html" class="btn btn-secondary" style="text-align:center;font-size:0.8rem;padding:8px"><i class="fas fa-key"></i> Password Generator</a></div></div>
+      <div class="tool-box">
+        <h3>About HTML Formatter</h3>
+        <p style="font-size:0.9rem;color:var(--text-secondary);line-height:1.6">Format and beautify unformatted HTML code for better readability.. This free online tool helps you optimize your SEO workflow. All processing is done in your browser — nothing is uploaded to any server.</p>
+      </div>
+    </div>
+  </div>
+  <footer class="footer">
+    <div class="footer-grid">
+      <div class="footer-col"><h4>SEO Agency Pro</h4><p style="opacity:0.7;font-size:0.85rem">Free professional SEO tools.</p></div>
+      <div class="footer-col"><h4>Tools</h4><ul><li><a href="keyword-density.html">Keyword Density</a></li><li><a href="serp-preview.html">SERP Preview</a></li><li><a href="schema-faq.html">FAQ Schema</a></li></ul></div>
+      <div class="footer-col"><h4>Company</h4><ul><li><a href="../about.html">About</a></li><li><a href="../contact.html">Contact</a></li><li><a href="../privacy.html">Privacy</a></li></ul></div>
+    </div>
+    <div class="footer-bottom">&copy; 2026 SEO Agency Pro — Made by Coding with Nova Tech</div>
+  </footer>
+  <div class="toast" id="toast"></div>
+  <script src="../assets/js/main.js"></script>
+  <script>
+  function runTool() {
+    var el = document.getElementById('toolOutput');
+    el.style.display = 'block';
+    var text = (document.getElementById('toolInput')||{}).value || '';
+    var result;
+    try {
+      result = (function(t) {
+        
+    var i=0,d=0,r='',inTag=false,voidEls=['area','base','br','col','embed','hr','img','input','link','meta','param','source','track','wbr'];
+    for(var j=0;j<t.length;j++){var c=t[j];
+      if(c==='<'){inTag=true;if(t[j+1]!=='/'){r+='\n'+'  '.repeat(d);d++;}else{d--;r+='\n'+'  '.repeat(d);}r+=c;}
+      else if(c==='>'){inTag=false;r+=c;}
+      else{r+=c;}}
+    return '<textarea class="traffic-input" readonly>'+r.trim()+'</textarea><button class="btn btn-secondary" onclick="navigator.clipboard.writeText(document.querySelector('#toolOutput textarea').value)"><i class="fas fa-copy"></i> Copy</button>';
+  
+      })(text);
+    } catch(e) {
+      result = '<div style="padding:16px;color:#c62828;background:#ffebee;border-radius:8px"><i class="fas fa-exclamation-circle"></i> Error: ' + e.message + '</div>';
+    }
+    el.innerHTML = result;
+    App.toast('Tool run complete!');
+  }
+  </script>
+<script>if("serviceWorker"in navigator){navigator.serviceWorker.register("/SEO-Tools-Engine-Pro/sw.js")}</script></body>
+</html>

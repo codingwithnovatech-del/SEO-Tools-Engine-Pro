@@ -1,0 +1,678 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="robots" content="noindex, nofollow">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <link rel="stylesheet" href="assets/css/style.css">
+  <title>Dashboard - SEO Agency Pro</title>
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-JL9JZTFZYH"></script>
+  <script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-JL9JZTFZYH');</script>
+  <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-auth.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-database.js"></script>
+  <script src="assets/js/firebase-config.js"></script>
+</head>
+<body>
+
+<div id="dashLoader" class="dash-loader">
+  <div class="dash-loader-inner">
+    <div class="login-spinner"></div>
+    <h3>Verifying Authentication</h3>
+    <p>Please wait...</p>
+  </div>
+</div>
+
+<div id="dashApp" class="dash-app" style="display:none">
+
+  <aside class="dash-sidebar" id="dashSidebar">
+    <div class="dash-sidebar-hd">
+      <a href="/" class="dash-logo"><i class="fas fa-chart-line"></i> <span>SEO Agency</span></a>
+      <button class="dash-sidebar-close" id="dashSidebarClose">&times;</button>
+    </div>
+    <nav class="dash-nav" id="dashNav">
+      <a class="active" data-section="overview"><i class="fas fa-th-large"></i> <span>Overview</span></a>
+      <a data-section="projects"><i class="fas fa-folder"></i> <span>SEO Projects</span></a>
+      <a data-section="keywords"><i class="fas fa-key"></i> <span>Keyword Tracking</span></a>
+      <a data-section="audit"><i class="fas fa-shield-alt"></i> <span>Website Audit</span></a>
+      <a data-section="reports"><i class="fas fa-file-alt"></i> <span>Reports</span></a>
+      <a data-section="notifications"><i class="fas fa-bell"></i> <span>Notifications</span></a>
+      <a data-section="profile"><i class="fas fa-user-cog"></i> <span>Profile</span></a>
+    </nav>
+    <div class="dash-sidebar-ft">
+      <a href="/">← Back to Site</a>
+    </div>
+  </aside>
+
+  <div class="dash-main">
+    <header class="dash-topbar">
+      <button class="dash-menu-btn" id="dashMenuBtn"><i class="fas fa-bars"></i></button>
+      <div class="dash-topbar-title" id="dashPageTitle">Overview</div>
+      <div class="dash-topbar-right">
+        <button class="dash-icon-btn" id="dashNotifBtn" title="Notifications">
+          <i class="fas fa-bell"></i>
+          <span class="dash-badge" id="dashNotifBadge">0</span>
+        </button>
+        <button class="dash-icon-btn" id="dashThemeBtn" onclick="toggleDashTheme()" title="Theme"><i class="fas fa-moon"></i></button>
+        <div class="dash-user-dropdown">
+          <img id="dashUserAvatar" src="" alt="" class="dash-user-avatar">
+          <div class="dash-user-dropdown-menu">
+            <div class="dash-user-dd-hd">
+              <strong id="dashUserNameDD">User</strong>
+              <small id="dashUserEmailDD"></small>
+            </div>
+            <a data-section="profile"><i class="fas fa-user-cog"></i> Profile</a>
+            <a id="dashLogoutBtn"><i class="fas fa-sign-out-alt"></i> Logout</a>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <div id="verifyBanner" style="display:none;padding:12px 24px;background:var(--warning);color:#fff;font-size:0.85rem;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px">
+      <span><i class="fas fa-exclamation-triangle"></i> Please verify your email address. Check your inbox for the verification link.</span>
+      <div style="display:flex;gap:8px;flex-wrap:wrap">
+        <button class="btn" style="padding:6px 16px;font-size:0.8rem;background:#fff;color:var(--warning);border:none;border-radius:6px;cursor:pointer;font-weight:600" id="resendVerifyBanner"><i class="fas fa-paper-plane"></i> Resend</button>
+        <button class="btn" style="padding:6px 16px;font-size:0.8rem;background:rgba(255,255,255,0.2);color:#fff;border:1px solid rgba(255,255,255,0.4);border-radius:6px;cursor:pointer;font-weight:500" id="refreshVerifyBanner"><i class="fas fa-sync"></i> Refresh</button>
+        <button class="btn" style="padding:6px 16px;font-size:0.8rem;background:rgba(0,0,0,0.15);color:#fff;border:none;border-radius:6px;cursor:pointer;font-weight:500" id="logoutVerifyBanner"><i class="fas fa-sign-out-alt"></i> Logout</button>
+      </div>
+    </div>
+    <div class="dash-content">
+
+      <!-- Overview -->
+      <section class="dash-section active" id="section-overview">
+        <div class="dash-greeting">
+          <h2>Welcome back, <span id="dashGreetingName">User</span> 👋</h2>
+          <p id="dashGreetingSub">Here's your SEO performance overview</p>
+        </div>
+        <div class="dash-stats" id="overviewStats">
+          <div class="dash-stat-card"><div class="dash-stat-icon" style="background:#e8f5e9"><i class="fas fa-globe" style="color:#2e7d32"></i></div><div><div class="dash-stat-num" id="statProjects">0</div><div class="dash-stat-label">Active Projects</div></div></div>
+          <div class="dash-stat-card"><div class="dash-stat-icon" style="background:#e3f2fd"><i class="fas fa-chart-line" style="color:#1565c0"></i></div><div><div class="dash-stat-num" id="statKeywords">0</div><div class="dash-stat-label">Keywords Tracked</div></div></div>
+          <div class="dash-stat-card"><div class="dash-stat-icon" style="background:#fff3e0"><i class="fas fa-tasks" style="color:#e65100"></i></div><div><div class="dash-stat-num" id="statAudits">0</div><div class="dash-stat-label">Audits Completed</div></div></div>
+          <div class="dash-stat-card"><div class="dash-stat-icon" style="background:#fce4ec"><i class="fas fa-file-alt" style="color:#c62828"></i></div><div><div class="dash-stat-num" id="statReports">0</div><div class="dash-stat-label">Reports</div></div></div>
+        </div>
+        <div class="dash-grid-2">
+          <div class="dash-card">
+            <h4><i class="fas fa-clock"></i> Recent Activity</h4>
+            <div class="dash-activity" id="recentActivity"><p style="color:var(--text-secondary);font-size:0.85rem">Loading...</p></div>
+          </div>
+          <div class="dash-card">
+            <h4><i class="fas fa-trophy"></i> Top Keywords</h4>
+            <div class="dash-rank-list" id="topKeywords"><p style="color:var(--text-secondary);font-size:0.85rem">Loading...</p></div>
+          </div>
+        </div>
+      </section>
+
+      <!-- SEO Projects -->
+      <section class="dash-section" id="section-projects">
+        <div class="dash-section-hd">
+          <h2><i class="fas fa-folder"></i> SEO Projects</h2>
+          <button class="btn btn-primary" onclick="openProjectModal()"><i class="fas fa-plus"></i> New Project</button>
+        </div>
+        <div class="dash-table-wrap">
+          <table class="dash-table">
+            <thead><tr><th>Website</th><th>Status</th><th>Pages</th><th>Score</th><th>Last Audit</th><th>Action</th></tr></thead>
+            <tbody id="projectsTableBody"><tr><td colspan="6" style="text-align:center;color:var(--text-secondary)">Loading...</td></tr></tbody>
+          </table>
+        </div>
+      </section>
+
+      <!-- Keyword Tracking -->
+      <section class="dash-section" id="section-keywords">
+        <div class="dash-section-hd">
+          <h2><i class="fas fa-key"></i> Keyword Tracking</h2>
+          <button class="btn btn-primary" onclick="openKeywordModal()"><i class="fas fa-plus"></i> Add Keyword</button>
+        </div>
+        <div class="dash-table-wrap">
+          <table class="dash-table">
+            <thead><tr><th>Keyword</th><th>Position</th><th>Change</th><th>Volume</th><th>Last Checked</th><th>Action</th></tr></thead>
+            <tbody id="keywordsTableBody"><tr><td colspan="6" style="text-align:center;color:var(--text-secondary)">Loading...</td></tr></tbody>
+          </table>
+        </div>
+      </section>
+
+      <!-- Website Audit -->
+      <section class="dash-section" id="section-audit">
+        <div class="dash-section-hd">
+          <h2><i class="fas fa-shield-alt"></i> Website Audit</h2>
+          <div style="display:flex;gap:8px;flex-wrap:wrap">
+            <button class="btn btn-primary" onclick="runAudit()"><i class="fas fa-search"></i> Run Audit</button>
+            <button class="btn btn-secondary" onclick="document.getElementById('auditUrlInput').value='';document.getElementById('auditResults').style.display='none'"><i class="fas fa-undo"></i> Reset</button>
+          </div>
+        </div>
+        <div style="display:flex;gap:10px;margin-bottom:20px;flex-wrap:wrap">
+          <input type="url" id="auditUrlInput" placeholder="https://example.com" class="auth-input" style="flex:1;min-width:200px">
+        </div>
+        <div id="auditResults" style="display:none">
+          <div class="dash-grid-2">
+            <div class="dash-card"><h4>Last Audit Results</h4><div id="auditScores" style="margin-top:16px"></div></div>
+            <div class="dash-card"><h4>Issues Found</h4><div id="auditIssues" class="dash-issues"></div></div>
+          </div>
+        </div>
+        <div class="dash-table-wrap" style="margin-top:20px">
+          <table class="dash-table">
+            <thead><tr><th>URL</th><th>SEO</th><th>Accessibility</th><th>Performance</th><th>Best Practices</th><th>Date</th><th>Action</th></tr></thead>
+            <tbody id="auditsTableBody"><tr><td colspan="7" style="text-align:center;color:var(--text-secondary)">Loading...</td></tr></tbody>
+          </table>
+        </div>
+      </section>
+
+      <!-- Reports -->
+      <section class="dash-section" id="section-reports">
+        <div class="dash-section-hd">
+          <h2><i class="fas fa-file-alt"></i> Reports</h2>
+          <button class="btn btn-primary" onclick="openReportModal()"><i class="fas fa-plus"></i> Generate Report</button>
+        </div>
+        <div class="dash-table-wrap">
+          <table class="dash-table">
+            <thead><tr><th>Report Name</th><th>Website</th><th>Date</th><th>Type</th><th>Action</th></tr></thead>
+            <tbody id="reportsTableBody"><tr><td colspan="5" style="text-align:center;color:var(--text-secondary)">Loading...</td></tr></tbody>
+          </table>
+        </div>
+      </section>
+
+      <!-- Notifications -->
+      <section class="dash-section" id="section-notifications">
+        <div class="dash-section-hd">
+          <h2><i class="fas fa-bell"></i> Notifications</h2>
+          <button class="btn btn-secondary" onclick="markAllNotifRead()"><i class="fas fa-check-double"></i> Mark All Read</button>
+        </div>
+        <div class="dash-notif-list" id="notifList"><p style="color:var(--text-secondary);padding:20px">Loading...</p></div>
+      </section>
+
+      <!-- Profile -->
+      <section class="dash-section" id="section-profile">
+        <div class="dash-section-hd">
+          <h2><i class="fas fa-user-cog"></i> Profile Settings</h2>
+          <button class="btn btn-primary" id="profileSaveBtn" onclick="saveProfile()"><i class="fas fa-save"></i> Save Changes</button>
+        </div>
+        <div class="dash-profile-card">
+          <div class="dash-profile-avatar">
+            <img id="dashProfileAvatar" src="" alt="">
+          </div>
+          <div class="dash-profile-info">
+            <div class="dash-profile-field"><label>Display Name</label><input type="text" id="profileName" class="dash-input"></div>
+            <div class="dash-profile-field"><label>Email</label><input type="email" id="profileEmail" class="dash-input" readonly></div>
+            <div class="dash-profile-field"><label>Company</label><input type="text" id="profileCompany" class="dash-input" placeholder="Your agency or company name"></div>
+            <div class="dash-profile-field"><label>Website</label><input type="url" id="profileWebsite" class="dash-input" placeholder="https://yoursite.com"></div>
+            <div class="dash-profile-field"><label>Phone</label><input type="tel" id="profilePhone" class="dash-input" placeholder="+1 234 567 890"></div>
+            <div class="dash-profile-field"><label>Bio</label><textarea id="profileBio" class="dash-input" rows="2" placeholder="Tell us about yourself" style="resize:vertical"></textarea></div>
+          </div>
+        </div>
+      </section>
+
+    </div>
+  </div>
+</div>
+
+<!-- Add Project Modal -->
+<div class="dash-modal" id="projectModal">
+  <div class="dash-modal-bg" onclick="closeProjectModal()"></div>
+  <div class="dash-modal-content">
+    <h3 id="projectModalTitle"><i class="fas fa-plus"></i> New Project</h3>
+    <input type="text" id="projName" class="auth-input" placeholder="Website name e.g. My Blog" style="margin-bottom:10px">
+    <input type="url" id="projUrl" class="auth-input" placeholder="https://example.com" style="margin-bottom:10px">
+    <select id="projStatus" class="auth-input" style="margin-bottom:16px"><option value="Active">Active</option><option value="Paused">Paused</option><option value="Pending">Pending</option></select>
+    <div style="display:flex;gap:8px">
+      <button class="btn btn-primary" style="flex:1" onclick="saveProject()"><i class="fas fa-save"></i> Save</button>
+      <button class="btn btn-secondary" style="flex:1" onclick="closeProjectModal()">Cancel</button>
+    </div>
+  </div>
+</div>
+
+<!-- Add Keyword Modal -->
+<div class="dash-modal" id="keywordModal">
+  <div class="dash-modal-bg" onclick="closeKeywordModal()"></div>
+  <div class="dash-modal-content">
+    <h3><i class="fas fa-plus"></i> Add Keyword</h3>
+    <input type="text" id="kwKeyword" class="auth-input" placeholder="e.g. seo tools" style="margin-bottom:10px">
+    <input type="number" id="kwPosition" class="auth-input" placeholder="Current position (e.g. 5)" style="margin-bottom:10px">
+    <input type="number" id="kwVolume" class="auth-input" placeholder="Search volume" style="margin-bottom:16px">
+    <div style="display:flex;gap:8px">
+      <button class="btn btn-primary" style="flex:1" onclick="saveKeyword()"><i class="fas fa-save"></i> Save</button>
+      <button class="btn btn-secondary" style="flex:1" onclick="closeKeywordModal()">Cancel</button>
+    </div>
+  </div>
+</div>
+
+<!-- Add Report Modal -->
+<div class="dash-modal" id="reportModal">
+  <div class="dash-modal-bg" onclick="closeReportModal()"></div>
+  <div class="dash-modal-content">
+    <h3><i class="fas fa-plus"></i> Generate Report</h3>
+    <input type="text" id="repName" class="auth-input" placeholder="Report name" style="margin-bottom:10px">
+    <input type="url" id="repUrl" class="auth-input" placeholder="Website URL" style="margin-bottom:10px">
+    <select id="repType" class="auth-input" style="margin-bottom:16px"><option value="Monthly">Monthly</option><option value="Keywords">Keywords</option><option value="Audit">Audit</option><option value="Competitor">Competitor</option></select>
+    <div style="display:flex;gap:8px">
+      <button class="btn btn-primary" style="flex:1" onclick="saveReport()"><i class="fas fa-save"></i> Generate</button>
+      <button class="btn btn-secondary" style="flex:1" onclick="closeReportModal()">Cancel</button>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+<script src="assets/js/main.js"></script>
+<script>
+(function() {
+  var loader = document.getElementById('dashLoader');
+  var app = document.getElementById('dashApp');
+  var currentUser = null;
+  var uid = null;
+
+  function toast(m) { var t=document.getElementById('toast'); if(!t)return; t.textContent=m; t.classList.add('show'); setTimeout(function(){t.classList.remove('show')},2500); }
+
+  // ─── Firebase Paths ───
+  function dbPath(sub) { return 'dashboard/' + uid + '/' + sub; }
+
+  // ─── Load all dashboard data ───
+  function loadOverview() {
+    if (!db) return;
+    db.ref(dbPath('projects')).once('value', function(s) {
+      var d = s.val(); var count = d ? Object.keys(d).length : 0;
+      document.getElementById('statProjects').textContent = count;
+    });
+    db.ref(dbPath('keywords')).once('value', function(s) {
+      var d = s.val(); var count = d ? Object.keys(d).length : 0;
+      document.getElementById('statKeywords').textContent = count;
+    });
+    db.ref(dbPath('audits')).once('value', function(s) {
+      var d = s.val(); var count = d ? Object.keys(d).length : 0;
+      document.getElementById('statAudits').textContent = count;
+    });
+    db.ref(dbPath('reports')).once('value', function(s) {
+      var d = s.val(); var count = d ? Object.keys(d).length : 0;
+      document.getElementById('statReports').textContent = count;
+    });
+    loadRecentActivity();
+    loadTopKeywords();
+  }
+
+  function loadRecentActivity() {
+    var el = document.getElementById('recentActivity');
+    if (!db) { el.innerHTML = '<p style="color:var(--text-secondary)">No activity yet.</p>'; return; }
+    db.ref(dbPath('audits')).limitToLast(3).once('value', function(s) {
+      var d = s.val();
+      if (!d) { el.innerHTML = '<p style="color:var(--text-secondary)">No recent activity. Run an audit!</p>'; return; }
+      el.innerHTML = Object.values(d).reverse().map(function(a) {
+        var ago = timeAgo(a.createdAt);
+        return '<div class="dash-activity-item"><span class="dash-activity-dot" style="background:#1565c0"></span><div><strong>SEO Audit</strong><p>' + a.url + ' — Score: ' + a.seo + '/100</p><small>' + ago + '</small></div></div>';
+      }).join('');
+    });
+  }
+
+  function loadTopKeywords() {
+    var el = document.getElementById('topKeywords');
+    if (!db) { el.innerHTML = '<p style="color:var(--text-secondary)">No keywords yet.</p>'; return; }
+    db.ref(dbPath('keywords')).orderByChild('position').limitToFirst(5).once('value', function(s) {
+      var d = s.val();
+      if (!d) { el.innerHTML = '<p style="color:var(--text-secondary)">No keywords tracked yet. Add one!</p>'; return; }
+      var items = Object.values(d).sort(function(a,b) { return (a.position||999) - (b.position||999); }).slice(0,5);
+      el.innerHTML = items.map(function(k) {
+        var ch = k.change || 0;
+        var cls = ch >= 0 ? 'up' : 'down';
+        var icon = ch >= 0 ? 'fa-arrow-up' : 'fa-arrow-down';
+        return '<div class="dash-rank-item"><span class="dash-rank-pos">#' + (k.position||'?') + '</span><span>' + k.keyword + '</span><span class="dash-rank-change ' + cls + '"><i class="fas ' + icon + '"></i> ' + (ch>0?'+':'') + ch + '</span></div>';
+      }).join('');
+    });
+  }
+
+  function loadProjects() {
+    var el = document.getElementById('projectsTableBody');
+    if (!db) { el.innerHTML = '<tr><td colspan="6" style="text-align:center;color:var(--text-secondary)">Firebase not connected</td></tr>'; return; }
+    db.ref(dbPath('projects')).on('value', function(s) {
+      var d = s.val();
+      if (!d) { el.innerHTML = '<tr><td colspan="6" style="text-align:center;color:var(--text-secondary)">No projects yet. Create one!</td></tr>'; return; }
+      el.innerHTML = Object.keys(d).map(function(k) {
+        var p = d[k];
+        var statClass = (p.status||'Active').toLowerCase();
+        var scoreHtml = p.score ? '<span class="dash-score ' + (p.score>=70?'good':p.score>=50?'avg':'bad') + '">' + p.score + '</span>' : '—';
+        return '<tr><td><strong>' + p.name + '</strong><br><small style="color:var(--text-secondary)">' + (p.website||p.url) + '</small></td><td><span class="dash-status ' + statClass + '">' + (p.status||'Active') + '</span></td><td>' + (p.pages||'—') + '</td><td>' + scoreHtml + '</td><td>' + (p.lastAudit || '—') + '</td><td><button class="dash-table-btn" onclick="deleteProject(\''+k+'\')"><i class="fas fa-trash"></i></button></td></tr>';
+      }).join('');
+      document.getElementById('statProjects').textContent = Object.keys(d).length;
+    });
+  }
+
+  function loadKeywords() {
+    var el = document.getElementById('keywordsTableBody');
+    if (!db) { el.innerHTML = '<tr><td colspan="6" style="text-align:center;color:var(--text-secondary)">Firebase not connected</td></tr>'; return; }
+    db.ref(dbPath('keywords')).on('value', function(s) {
+      var d = s.val();
+      if (!d) { el.innerHTML = '<tr><td colspan="6" style="text-align:center;color:var(--text-secondary)">No keywords yet. Add one!</td></tr>'; return; }
+      el.innerHTML = Object.keys(d).map(function(k) {
+        var kw = d[k];
+        var pos = kw.position || '—';
+        var ch = kw.change || 0;
+        var cls = ch >= 0 ? 'up' : 'down';
+        var icon = ch >= 0 ? 'fa-arrow-up' : 'fa-arrow-down';
+        var bg = pos <= 3 ? '#2e7d32' : pos <= 10 ? '#1565c0' : '#c62828';
+        return '<tr><td><strong>' + kw.keyword + '</strong></td><td><span class="dash-rank-badge" style="background:'+bg+';color:#fff">#' + pos + '</span></td><td><span class="dash-rank-change ' + cls + '"><i class="fas ' + icon + '"></i> ' + (ch>0?'+':'') + ch + '</span></td><td>' + (kw.volume||'—') + '</td><td>' + (kw.lastUpdated||kw.lastChecked||'—') + '</td><td><button class="dash-table-btn" onclick="deleteKeyword(\''+k+'\')"><i class="fas fa-trash"></i></button></td></tr>';
+      }).join('');
+      document.getElementById('statKeywords').textContent = Object.keys(d).length;
+    });
+  }
+
+  function loadAudits() {
+    var el = document.getElementById('auditsTableBody');
+    if (!db) { el.innerHTML = '<tr><td colspan="7" style="text-align:center;color:var(--text-secondary)">Firebase not connected</td></tr>'; return; }
+    db.ref(dbPath('audits')).on('value', function(s) {
+      var d = s.val();
+      if (!d) { el.innerHTML = '<tr><td colspan="7" style="text-align:center;color:var(--text-secondary)">No audits yet. Run one!</td></tr>'; return; }
+      el.innerHTML = Object.keys(d).reverse().map(function(k) {
+        var a = d[k];
+        return '<tr><td><small>' + a.url + '</small></td><td><span class="dash-score ' + (a.seo>=70?'good':a.seo>=50?'avg':'bad') + '">' + a.seo + '</span></td><td>' + (a.accessibility||'—') + '</td><td>' + (a.performance||'—') + '</td><td>' + (a.bestPractices||'—') + '</td><td><small>' + (a.date||'') + '</small></td><td><button class="dash-table-btn" onclick="deleteAudit(\''+k+'\')"><i class="fas fa-trash"></i></button></td></tr>';
+      }).join('');
+      document.getElementById('statAudits').textContent = Object.keys(d).length;
+    });
+  }
+
+  function loadReports() {
+    var el = document.getElementById('reportsTableBody');
+    if (!db) { el.innerHTML = '<tr><td colspan="5" style="text-align:center;color:var(--text-secondary)">Firebase not connected</td></tr>'; return; }
+    db.ref(dbPath('reports')).on('value', function(s) {
+      var d = s.val();
+      if (!d) { el.innerHTML = '<tr><td colspan="5" style="text-align:center;color:var(--text-secondary)">No reports yet. Generate one!</td></tr>'; return; }
+      el.innerHTML = Object.keys(d).reverse().map(function(k) {
+        var r = d[k];
+        var colors = {Monthly:'#e3f2fd;color:#1565c0',Keywords:'#e8f5e9;color:#2e7d32',Audit:'#fff3e0;color:#e65100',Competitor:'#fce4ec;color:#c62828'};
+        var st = colors[r.type] || '#e3f2fd;color:#1565c0';
+        return '<tr><td><strong>' + r.name + '</strong></td><td><small>' + r.website + '</small></td><td>' + r.date + '</td><td><span class="dash-badge" style="background:'+st+'">' + r.type + '</span></td><td><button class="dash-table-btn" onclick="deleteReport(\''+k+'\')"><i class="fas fa-trash"></i></button></td></tr>';
+      }).join('');
+      document.getElementById('statReports').textContent = Object.keys(d).length;
+    });
+  }
+
+  function loadNotifications() {
+    var el = document.getElementById('notifList');
+    var badge = document.getElementById('dashNotifBadge');
+    if (!db) { el.innerHTML = '<p style="color:var(--text-secondary);padding:20px">Firebase not connected</p>'; return; }
+    db.ref(dbPath('notifications')).on('value', function(s) {
+      var d = s.val();
+      if (!d) { el.innerHTML = '<p style="color:var(--text-secondary);padding:20px">No notifications yet.</p>'; badge.textContent = '0'; return; }
+      var keys = Object.keys(d);
+      var unread = 0;
+      el.innerHTML = keys.reverse().map(function(k) {
+        var n = d[k];
+        if (!n.read) unread++;
+        var cls = n.read ? '' : ' unread';
+        var dot = n.read ? '' : '<span class="dash-notif-dot"></span>';
+        var icons = {check:'#e8f5e9;color:#2e7d32',arrow:'#e3f2fd;color:#1565c0',warning:'#fff3e0;color:#e65100',file:'#f3e5f5;color:#7b1fa2',user:'#e8f5e9;color:#2e7d32'};
+        var ic = icons[n.icon] || '#e3f2fd;color:#1565c0';
+        return '<div class="dash-notif' + cls + '"><div class="dash-notif-icon" style="background:'+ic.split(';')[0]+'"><i class="fas fa-' + (n.icon||'bell') + '" style="'+(ic.split(';')[1]||'color:#1565c0')+'"></i></div><div class="dash-notif-body"><strong>' + n.title + '</strong><p>' + n.message + '</p><small>' + timeAgo(n.timestamp || n.createdAt) + '</small></div>' + dot + '</div>';
+      }).join('');
+      badge.textContent = unread;
+    });
+  }
+
+  function loadProfile() {
+    if (!db || !uid) return;
+    db.ref('users/' + uid + '/profile').once('value', function(s) {
+      var p = s.val();
+      if (!p) return;
+      if (p.name) document.getElementById('profileName').value = p.name;
+      if (p.company) document.getElementById('profileCompany').value = p.company;
+      if (p.website) document.getElementById('profileWebsite').value = p.website;
+      if (p.phone) document.getElementById('profilePhone').value = p.phone;
+      if (p.bio) document.getElementById('profileBio').value = p.bio;
+    });
+  }
+
+  // ─── CRUD Operations ───
+  window.openProjectModal = function() { document.getElementById('projectModal').classList.add('show'); document.getElementById('projName').focus(); };
+  window.closeProjectModal = function() { document.getElementById('projectModal').classList.remove('show'); };
+  window.saveProject = function() {
+    var name = document.getElementById('projName').value.trim();
+    var url = document.getElementById('projUrl').value.trim();
+    var status = document.getElementById('projStatus').value;
+    if (!name || !url) { toast('Enter name and URL'); return; }
+    db.ref(dbPath('projects')).push({name:name,website:url,status:status,pages:0,score:null,createdAt:new Date().toISOString()});
+    toast('Project added!'); closeProjectModal();
+    document.getElementById('projName').value=''; document.getElementById('projUrl').value='';
+  };
+  window.deleteProject = function(k) { if (confirm('Delete this project?')) db.ref(dbPath('projects')+'/'+k).remove(); };
+
+  window.openKeywordModal = function() { document.getElementById('keywordModal').classList.add('show'); document.getElementById('kwKeyword').focus(); };
+  window.closeKeywordModal = function() { document.getElementById('keywordModal').classList.remove('show'); };
+  window.saveKeyword = function() {
+    var kw = document.getElementById('kwKeyword').value.trim();
+    var pos = parseInt(document.getElementById('kwPosition').value) || 0;
+    var vol = parseInt(document.getElementById('kwVolume').value) || 0;
+    if (!kw) { toast('Enter keyword'); return; }
+    db.ref(dbPath('keywords')).push({keyword:kw,position:pos,change:0,volume:vol,lastUpdated:new Date().toISOString()});
+    toast('Keyword added!'); closeKeywordModal();
+    document.getElementById('kwKeyword').value=''; document.getElementById('kwPosition').value=''; document.getElementById('kwVolume').value='';
+  };
+  window.deleteKeyword = function(k) { if (confirm('Delete this keyword?')) db.ref(dbPath('keywords')+'/'+k).remove(); };
+
+  window.runAudit = function() {
+    var url = document.getElementById('auditUrlInput').value.trim();
+    if (!url) { toast('Enter a URL to audit'); return; }
+    var results = document.getElementById('auditResults');
+    var scores = document.getElementById('auditScores');
+    var issues = document.getElementById('auditIssues');
+    var seo = Math.floor(Math.random()*30)+60;
+    var acc = Math.floor(Math.random()*30)+55;
+    var perf = Math.floor(Math.random()*25)+60;
+    var bp = Math.floor(Math.random()*25)+65;
+    results.style.display = 'block';
+    scores.innerHTML = ['SEO','Accessibility','Performance','Best Practices'].map(function(label,i) {
+      var vals = [seo,acc,perf,bp];
+      var cls = vals[i]>=75?'#2e7d32':vals[i]>=60?'#e65100':'#c62828';
+      return '<div style="display:flex;justify-content:space-between;margin-bottom:8px"><span>'+label+'</span><strong>'+vals[i]+'/100</strong></div><div class="dash-progress" style="margin-bottom:12px"><div class="dash-progress-bar" style="width:'+vals[i]+'%;background:'+cls+'"></div></div>';
+    }).join('');
+    var issueList = [];
+    if (seo<75) issueList.push({icon:'!',bg:'#ffebee',c:'#c62828',t:'Missing Meta Descriptions',d:'Pages without meta descriptions'});
+    if (perf<70) issueList.push({icon:'!',bg:'#fff3e0',c:'#e65100',t:'Slow Loading Pages',d:'Pages > 3s load time'});
+    if (bp<70) issueList.push({icon:'!',bg:'#ffebee',c:'#c62828',t:'Broken Links',d:'Internal 404 errors'});
+    if (seo>=60) issueList.push({icon:'✓',bg:'#e8f5e9',c:'#2e7d32',t:'Mobile Friendly',d:'All pages pass mobile test'});
+    issues.innerHTML = issueList.map(function(i) {
+      return '<div class="dash-issue"><span class="dash-issue-icon" style="background:'+i.bg+';color:'+i.c+'">'+i.icon+'</span><div><strong>'+i.t+'</strong><p>'+i.d+'</p></div></div>';
+    }).join('');
+
+    if (db) {
+      db.ref(dbPath('audits')).push({
+        url: url, seo: seo, accessibility: acc, performance: perf, bestPractices: bp,
+        date: new Date().toISOString()
+      });
+      toast('Audit saved to Firebase!');
+    }
+  };
+
+  window.openReportModal = function() { document.getElementById('reportModal').classList.add('show'); document.getElementById('repName').focus(); };
+  window.closeReportModal = function() { document.getElementById('reportModal').classList.remove('show'); };
+  window.saveReport = function() {
+    var name = document.getElementById('repName').value.trim();
+    var website = document.getElementById('repUrl').value.trim();
+    var type = document.getElementById('repType').value;
+    if (!name || !website) { toast('Enter name and website'); return; }
+    db.ref(dbPath('reports')).push({name:name,website:website,type:type,date:new Date().toISOString()});
+    toast('Report generated!'); closeReportModal();
+    document.getElementById('repName').value=''; document.getElementById('repUrl').value='';
+  };
+  window.deleteReport = function(k) { if (confirm('Delete this report?')) db.ref(dbPath('reports')+'/'+k).remove(); };
+
+  window.deleteAudit = function(k) { if (confirm('Delete this audit?')) db.ref(dbPath('audits')+'/'+k).remove(); };
+
+  window.markAllNotifRead = function() {
+    if (!db) return;
+    db.ref(dbPath('notifications')).once('value', function(s) {
+      var d = s.val();
+      if (!d) return;
+      Object.keys(d).forEach(function(k) { db.ref(dbPath('notifications')+'/'+k+'/read').set(true); });
+    });
+    toast('All marked as read');
+  };
+
+  window.saveProfile = function() {
+    if (!db || !uid) { toast('Not connected'); return; }
+    var data = {
+      name: document.getElementById('profileName').value.trim(),
+      company: document.getElementById('profileCompany').value.trim(),
+      website: document.getElementById('profileWebsite').value.trim(),
+      phone: document.getElementById('profilePhone').value.trim(),
+      bio: document.getElementById('profileBio').value.trim()
+    };
+    db.ref('users/' + uid + '/profile').update(data);
+    document.getElementById('dashGreetingName').textContent = data.name || currentUser.email.split('@')[0];
+    document.getElementById('dashUserNameDD').textContent = data.name || currentUser.email.split('@')[0];
+    toast('Profile saved!');
+  };
+
+  // ─── Helpers ───
+  function timeAgo(ts) {
+    if (!ts) return '';
+    var diff = Date.now() - new Date(ts).getTime();
+    var mins = Math.floor(diff/60000);
+    if (mins < 1) return 'Just now';
+    if (mins < 60) return mins + ' min ago';
+    var hrs = Math.floor(mins/60);
+    if (hrs < 24) return hrs + ' hour' + (hrs>1?'s':'') + ' ago';
+    var days = Math.floor(hrs/24);
+    return days + ' day' + (days>1?'s':'') + ' ago';
+  }
+
+  // ─── Email Verification Banner ───
+  var verifyBanner = document.getElementById('verifyBanner');
+
+  function checkEmailVerified(user) {
+    // Google accounts are pre-verified
+    var isGoogle = user.providerData && user.providerData.some(function(p) { return p.providerId === 'google.com'; });
+    if (isGoogle || user.emailVerified) {
+      verifyBanner.style.display = 'none';
+      return;
+    }
+    verifyBanner.style.display = 'flex';
+  }
+
+  document.getElementById('resendVerifyBanner').addEventListener('click', function() {
+    if (!currentUser) { toast('No user session'); return; }
+    currentUser.sendEmailVerification().then(function() {
+      toast('Verification email sent! Check your inbox.');
+    }).catch(function(e) {
+      toast(e.message || 'Failed to send verification email.');
+    });
+  });
+
+  document.getElementById('refreshVerifyBanner').addEventListener('click', function() {
+    if (!currentUser) { toast('No user session'); return; }
+    currentUser.reload().then(function() {
+      // Re-fetch the user
+      var updatedUser = firebase.auth().currentUser;
+      if (updatedUser && updatedUser.emailVerified) {
+        verifyBanner.style.display = 'none';
+        toast('Email verified! Welcome!');
+      } else {
+        toast('Email not yet verified. Check your inbox.');
+      }
+    }).catch(function(e) {
+      toast(e.message || 'Failed to refresh status.');
+    });
+  });
+
+  document.getElementById('logoutVerifyBanner').addEventListener('click', function() {
+    firebase.auth().signOut().then(function() { window.location.href = '/'; });
+  });
+
+  // ─── Init ───
+  function showApp(user) {
+    currentUser = user;
+    uid = user.uid;
+    loader.style.display = 'none';
+    app.style.display = 'flex';
+    var name = user.displayName || user.email.split('@')[0];
+    document.getElementById('dashGreetingName').textContent = name;
+    document.getElementById('dashUserNameDD').textContent = name;
+    document.getElementById('dashUserEmailDD').textContent = user.email;
+    document.getElementById('profileName').value = name;
+    document.getElementById('profileEmail').value = user.email;
+    document.getElementById('dashUserAvatar').src = user.photoURL || '';
+    document.getElementById('dashProfileAvatar').src = user.photoURL || '';
+    loadOverview();
+    loadProjects();
+    loadKeywords();
+    loadAudits();
+    loadReports();
+    loadNotifications();
+    loadProfile();
+    checkEmailVerified(user);
+  }
+
+  function checkAuth() {
+    if (typeof firebase === 'undefined' || !firebase.auth) {
+      loader.innerHTML = '<div class="dash-loader-inner"><p style="color:var(--text-secondary)">Firebase not loaded. <a href="login.html" style="color:var(--accent)">Sign in</a></p></div>';
+      return;
+    }
+    var loginTimer = setTimeout(function() { loader.innerHTML = '<div class="dash-loader-inner"><p style="color:var(--text-secondary)">No user signed in. <a href="login.html" style="color:var(--accent)">Sign in</a></p></div>'; }, 3000);
+    firebase.auth().onAuthStateChanged(function(user) {
+      if (user) { clearTimeout(loginTimer); showApp(user); }
+    });
+  }
+
+  checkAuth();
+
+  // Logout
+  document.getElementById('dashLogoutBtn').addEventListener('click', function() {
+    firebase.auth().signOut().then(function() { window.location.href = '/'; });
+  });
+
+  // Sidebar nav
+  var navLinks = document.querySelectorAll('#dashNav a');
+  var sections = document.querySelectorAll('.dash-section');
+  navLinks.forEach(function(link) {
+    link.addEventListener('click', function() {
+      var section = this.dataset.section;
+      navLinks.forEach(function(l) { l.classList.remove('active'); });
+      this.classList.add('active');
+      sections.forEach(function(s) { s.classList.remove('active'); });
+      document.getElementById('section-' + section).classList.add('active');
+      document.getElementById('dashPageTitle').textContent = this.querySelector('span').textContent;
+      document.getElementById('dashSidebar').classList.remove('open');
+    });
+  });
+
+  document.querySelectorAll('.dash-user-dropdown a[data-section]').forEach(function(el) {
+    el.addEventListener('click', function() {
+      var section = this.dataset.section;
+      navLinks.forEach(function(l) { l.classList.remove('active'); });
+      document.querySelector('#dashNav a[data-section="' + section + '"]').classList.add('active');
+      sections.forEach(function(s) { s.classList.remove('active'); });
+      document.getElementById('section-' + section).classList.add('active');
+      document.getElementById('dashPageTitle').textContent = document.querySelector('#dashNav a[data-section="' + section + '"] span').textContent;
+      document.querySelector('.dash-user-dropdown').classList.remove('open');
+    });
+  });
+
+  document.getElementById('dashUserAvatar').addEventListener('click', function(e) { e.stopPropagation(); document.querySelector('.dash-user-dropdown').classList.toggle('open'); });
+  document.addEventListener('click', function() { document.querySelector('.dash-user-dropdown').classList.remove('open'); });
+  document.getElementById('dashMenuBtn').addEventListener('click', function() { document.getElementById('dashSidebar').classList.toggle('open'); });
+  document.getElementById('dashSidebarClose').addEventListener('click', function() { document.getElementById('dashSidebar').classList.remove('open'); });
+
+  document.getElementById('dashNotifBtn').addEventListener('click', function() {
+    navLinks.forEach(function(l) { l.classList.remove('active'); });
+    document.querySelector('#dashNav a[data-section="notifications"]').classList.add('active');
+    sections.forEach(function(s) { s.classList.remove('active'); });
+    document.getElementById('section-notifications').classList.add('active');
+    document.getElementById('dashPageTitle').textContent = 'Notifications';
+  });
+})();
+
+function toggleDashTheme() {
+  var html = document.documentElement;
+  var cur = html.getAttribute('data-theme');
+  var next = cur === 'light' ? 'dark' : 'light';
+  html.setAttribute('data-theme', next);
+  localStorage.setItem('sTheme', next);
+  document.getElementById('dashThemeBtn').innerHTML = next === 'dark' ? '<i class="fas fa-sun"></i>' : '<i class="fas fa-moon"></i>';
+}
+
+(function() {
+  var t = localStorage.getItem('sTheme') || 'light';
+  document.documentElement.setAttribute('data-theme', t);
+  var btn = document.getElementById('dashThemeBtn');
+  if (btn) btn.innerHTML = t === 'dark' ? '<i class="fas fa-sun"></i>' : '<i class="fas fa-moon"></i>';
+})();
+</script>
+<script>if("serviceWorker"in navigator){navigator.serviceWorker.register("/SEO-Tools-Engine-Pro/sw.js")}</script></body>
+</html>

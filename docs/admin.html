@@ -1,0 +1,421 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="robots" content="noindex, nofollow">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <link rel="stylesheet" href="assets/css/style.css">
+  <title>Admin Panel - SEO Agency Pro</title>
+  <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-auth.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-database.js"></script>
+  <script src="assets/js/firebase-config.js"></script>
+  <script>
+  // Secondary Firebase app for admin (won't affect main site user sessions)
+  var adminFirebase = firebase.initializeApp(firebaseConfig, 'adminApp');
+  var adminAuth = adminFirebase.auth();
+  var adminDb = adminFirebase.database();
+  </script>
+</head>
+<body>
+
+<div id="adminLoader" class="dash-loader">
+  <div class="dash-loader-inner">
+    <div class="login-spinner"></div>
+    <h3>Verifying Admin Access</h3>
+    <p>Please wait...</p>
+  </div>
+</div>
+
+<div id="adminLoginPage" class="admin-login-page" style="display:none">
+  <div class="login-card" style="max-width:420px">
+    <div class="login-icon"><i class="fas fa-shield-alt"></i></div>
+    <h2 class="login-title">Admin Login</h2>
+    <p class="login-sub">Sign in with your admin credentials</p>
+    <div style="display:flex;flex-direction:column;gap:10px;margin-bottom:16px">
+      <input type="email" id="adminEmail" placeholder="Admin email" class="auth-input">
+      <input type="password" id="adminPass" placeholder="Password" class="auth-input">
+    </div>
+    <button class="btn btn-primary" id="adminLoginBtn" style="width:100%"><i class="fas fa-sign-in-alt"></i> Sign In</button>
+    <p style="margin-top:12px;font-size:0.8rem;color:var(--text-secondary);text-align:center">
+      <a href="/" style="color:var(--accent)">? Back to Home</a>
+    </p>
+  </div>
+</div>
+
+<div id="adminApp" class="dash-app" style="display:none">
+  <aside class="dash-sidebar" id="adminSidebar">
+    <div class="dash-sidebar-hd">
+      <a href="/" class="dash-logo"><i class="fas fa-shield-alt"></i> <span>Admin Panel</span></a>
+      <button class="dash-sidebar-close" id="adminSidebarClose">&times;</button>
+    </div>
+    <nav class="dash-nav" id="adminNav">
+      <a class="active" data-section="overview"><i class="fas fa-th-large"></i> <span>Overview</span></a>
+      <a data-section="messages"><i class="fas fa-envelope"></i> <span>Messages</span></a>
+      <a data-section="data"><i class="fas fa-database"></i> <span>Data Browser</span></a>
+      <a data-section="analytics"><i class="fas fa-chart-bar"></i> <span>Analytics</span></a>
+      <a data-section="users"><i class="fas fa-users"></i> <span>Users</span></a>
+      <a data-section="settings"><i class="fas fa-cog"></i> <span>Settings</span></a>
+    </nav>
+    <div class="dash-sidebar-ft">
+      <a href="/">? Back to Site</a>
+    </div>
+  </aside>
+
+  <div class="dash-main">
+    <header class="dash-topbar">
+      <button class="dash-menu-btn" id="adminMenuBtn"><i class="fas fa-bars"></i></button>
+      <div class="dash-topbar-title" id="adminPageTitle">Overview</div>
+      <div class="dash-topbar-right">
+        <button class="dash-icon-btn" id="adminThemeBtn" onclick="toggleAdminTheme()" title="Theme"><i class="fas fa-moon"></i></button>
+        <button class="dash-icon-btn" onclick="adminLogout()" title="Logout" style="color:var(--accent)"><i class="fas fa-sign-out-alt"></i></button>
+      </div>
+    </header>
+
+    <div class="dash-content">
+
+      <!-- Overview -->
+      <section class="dash-section active" id="admin-section-overview">
+        <div class="dash-greeting">
+          <h2>Admin Dashboard ??</h2>
+          <p>Manage your SEO Agency platform — <span id="adminCurrentEmail" style="color:var(--accent)">admin@seotools.com</span></p>
+        </div>
+        <div class="dash-stats">
+          <div class="dash-stat-card"><div class="dash-stat-icon" style="background:#e8f5e9"><i class="fas fa-envelope" style="color:#2e7d32"></i></div><div><div class="dash-stat-num" id="adminTotalMsgs">0</div><div class="dash-stat-label">Total Messages</div></div></div>
+          <div class="dash-stat-card"><div class="dash-stat-icon" style="background:#ffebee"><i class="fas fa-envelope-open" style="color:#c62828"></i></div><div><div class="dash-stat-num" id="adminUnreadMsgs">0</div><div class="dash-stat-label">Unread</div></div></div>
+          <div class="dash-stat-card"><div class="dash-stat-icon" style="background:#e3f2fd"><i class="fas fa-users" style="color:#1565c0"></i></div><div><div class="dash-stat-num">7</div><div class="dash-stat-label">SEO Tools</div></div></div>
+          <div class="dash-stat-card"><div class="dash-stat-icon" style="background:#f3e5f5"><i class="fas fa-file-alt" style="color:#7b1fa2"></i></div><div><div class="dash-stat-num">8</div><div class="dash-stat-label">Blog Articles</div></div></div>
+        </div>
+        <div class="dash-grid-2">
+          <div class="dash-card">
+            <h4><i class="fas fa-clock"></i> Recent Messages</h4>
+            <div id="adminRecentMsgs" style="color:var(--text-secondary);font-size:0.85rem">No messages yet.</div>
+          </div>
+          <div class="dash-card">
+            <h4><i class="fas fa-tasks"></i> Quick Actions</h4>
+            <div style="display:flex;flex-direction:column;gap:8px;margin-top:8px">
+              <a href="contact.html" class="dash-tool"><i class="fas fa-envelope"></i> View Contact Page</a>
+              <a href="tools/" class="dash-tool"><i class="fas fa-wrench"></i> Manage Tools</a>
+              <a href="login.html" class="dash-tool"><i class="fas fa-user-plus"></i> User Login Page</a>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Messages -->
+      <section class="dash-section" id="admin-section-messages">
+        <div class="dash-section-hd">
+          <h2><i class="fas fa-envelope"></i> Contact Messages</h2>
+          <button class="btn btn-secondary" onclick="var el=document.getElementById('msgList');el.innerHTML='<p style=\"color:var(--text-secondary)\">Refreshing...</p>';App.loadMessages()"><i class="fas fa-sync"></i> Refresh</button>
+        </div>
+        <div id="msgList" style="color:var(--text-secondary)">Loading messages...</div>
+      </section>
+
+      <!-- Data Browser -->
+      <section class="dash-section" id="admin-section-data">
+        <div class="dash-section-hd">
+          <h2><i class="fas fa-database"></i> Data Browser</h2>
+          <div style="display:flex;gap:8px;flex-wrap:wrap">
+            <select id="adminDataType" class="auth-input" style="width:auto;min-width:140px;padding:8px 12px" onchange="loadAdminData()">
+              <option value="projects">Projects</option>
+              <option value="keywords">Keywords</option>
+              <option value="audits">Audits</option>
+              <option value="reports">Reports</option>
+            </select>
+            <button class="btn btn-secondary" onclick="loadAdminData()"><i class="fas fa-sync"></i> Refresh</button>
+          </div>
+        </div>
+        <div class="dash-table-wrap">
+          <table class="dash-table">
+            <thead id="adminDataThead"></thead>
+            <tbody id="adminDataTbody"><tr><td style="text-align:center;color:var(--text-secondary)">Select a data type to browse</td></tr></tbody>
+          </table>
+        </div>
+      </section>
+
+      <!-- Analytics -->
+      <section class="dash-section" id="admin-section-analytics">
+        <div class="dash-section-hd">
+          <h2><i class="fas fa-chart-bar"></i> Tool Analytics</h2>
+        </div>
+        <div class="dash-card">
+          <p style="color:var(--text-secondary)">Tool usage from Firebase analytics:</p>
+          <div id="adminAnalyticsData" style="margin-top:16px">
+            <div style="display:flex;justify-content:space-between;margin-bottom:8px"><span>SEO Score Checker</span><strong id="analytics_seo_score_checker">—</strong></div>
+            <div style="display:flex;justify-content:space-between;margin-bottom:8px"><span>Keyword Generator</span><strong id="analytics_keyword_generator">—</strong></div>
+            <div style="display:flex;justify-content:space-between;margin-bottom:8px"><span>Meta Tag Generator</span><strong id="analytics_meta_generator">—</strong></div>
+            <div style="display:flex;justify-content:space-between;margin-bottom:8px"><span>Word Counter</span><strong id="analytics_word_counter">—</strong></div>
+            <div style="display:flex;justify-content:space-between;margin-bottom:8px"><span>Sitemap Generator</span><strong id="analytics_sitemap_generator">—</strong></div>
+            <div style="display:flex;justify-content:space-between"><span>Robots.txt Generator</span><strong id="analytics_robots_generator">—</strong></div>
+            <div style="display:flex;justify-content:space-between;margin-top:8px"><span>Traffic Checker</span><strong id="analytics_traffic_checker">—</strong></div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Users -->
+      <section class="dash-section" id="admin-section-users">
+        <div class="dash-section-hd">
+          <h2><i class="fas fa-users"></i> Admin Users</h2>
+          <button class="btn btn-primary" onclick="addAdminByEmail()"><i class="fas fa-plus"></i> Add Admin</button>
+        </div>
+        <div class="dash-card">
+          <p style="color:var(--text-secondary);margin-bottom:12px">Admin users with panel access (from /admin/emails):</p>
+          <div id="adminUsersList" style="display:flex;flex-direction:column;gap:8px">Loading...</div>
+        </div>
+        <div class="dash-card" style="margin-top:16px">
+          <h4>Add New Admin</h4>
+          <div style="display:flex;gap:8px;margin-top:8px;flex-wrap:wrap">
+            <input type="email" id="adminNewEmail" class="auth-input" placeholder="Enter email to authorize" style="flex:1;min-width:200px">
+            <button class="btn btn-primary" onclick="addAdminByEmail()"><i class="fas fa-check"></i> Authorize</button>
+          </div>
+        </div>
+      </section>
+
+      <!-- Settings -->
+      <section class="dash-section" id="admin-section-settings">
+        <div class="dash-section-hd">
+          <h2><i class="fas fa-cog"></i> Settings</h2>
+        </div>
+        <div class="dash-card">
+          <h4>Site Settings</h4>
+          <div style="margin-top:12px;display:grid;grid-template-columns:1fr 1fr;gap:12px">
+            <div class="dash-profile-field"><label>Site Name</label><input type="text" id="settingsSiteName" class="dash-input" value="SEO Agency Pro"></div>
+            <div class="dash-profile-field"><label>Admin Email</label><input type="email" id="settingsAdminEmail" class="dash-input" readonly></div>
+          </div>
+          <button class="btn btn-primary" style="margin-top:16px" onclick="saveSettings()"><i class="fas fa-save"></i> Save Settings</button>
+        </div>
+        <div class="dash-card" style="margin-top:16px">
+          <h4>Firebase Console</h4>
+          <p style="color:var(--text-secondary);font-size:0.85rem;margin:8px 0">Quick access to Firebase management:</p>
+          <div style="display:flex;gap:8px;flex-wrap:wrap">
+            <a href="https://console.firebase.google.com/project/seo-tools-engine-pro/authentication/users" target="_blank" class="btn btn-secondary"><i class="fas fa-external-link-alt"></i> Firebase Users</a>
+            <a href="https://console.firebase.google.com/project/seo-tools-engine-pro/database/seo-tools-engine-pro-default-rtdb/data" target="_blank" class="btn btn-secondary"><i class="fas fa-database"></i> Realtime Database</a>
+          </div>
+        </div>
+      </section>
+
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+<div class="girl-wrap" id="girlWrap">
+  <div class="girl-3d" id="girl3d">
+    <div class="girl-glow"></div>
+    <div class="girl-ring"></div>
+    <img class="girl-avatar" id="girlAvatar" src="https://i.ibb.co/4ZXZGR0v/magnific-character-design-sheet-cu-y6q-MDQAPW9.png" alt="Support">
+    <div class="girl-badge"><i class="fas fa-headset"></i></div>
+  </div>
+  <div class="girl-shadow"></div>
+</div>
+<div class="girl-speech" id="girlSpeech">
+  <div class="speech-msg" id="girlSpeechMsg">Hi! I'm Priya, your support assistant! ?????</div>
+</div>
+<script src="assets/js/main.js"></script>
+<script src="assets/js/admin.js"></script>
+<script>
+(function() {
+  var loader = document.getElementById('adminLoader');
+  var loginPage = document.getElementById('adminLoginPage');
+  var adminApp = document.getElementById('adminApp');
+
+  function toast(m) { var t=document.getElementById('toast'); if(!t)return; t.textContent=m; t.classList.add('show'); setTimeout(function(){t.classList.remove('show')},2500); }
+
+  function showLogin() { loader.style.display='none'; loginPage.style.display='flex'; loginPage.style.alignItems='center'; loginPage.style.justifyContent='center'; loginPage.style.minHeight='100vh'; loginPage.style.padding='24px'; loginPage.style.background='var(--bg,#f8f9fa)'; adminApp.style.display='none'; }
+
+  function showAdmin() { loader.style.display='none'; loginPage.style.display='none'; adminApp.style.display='flex'; if (typeof App !== 'undefined') { App.loadMessages(); setTimeout(loadAdminUsers, 500); setTimeout(loadAdminAnalytics, 500); } }
+
+  // Check if already admin
+  var checked = false;
+  var loginTimer = null;
+
+  function verifyAdmin(user) {
+    if (!user && checked) return;
+    checked = true;
+    if (loginTimer) clearTimeout(loginTimer);
+    if (!user) { showLogin(); return; }
+    if (adminDb) {
+      adminDb.ref('admin/emails').once('value').then(function(snap) {
+        var emails = snap.val() || {};
+        // Support both formats: "email": true (new) and "0": "email" (old)
+        var emailKey = user.email.replace(/\./g, ',');
+        var isAdmin = emails[user.email] === true || emails[emailKey] === true || Object.values(emails).indexOf(user.email) !== -1 || user.email === 'admin@seotools.com';
+        if (isAdmin) {
+          sessionStorage.setItem('adminAuth','true');
+          sessionStorage.setItem('adminUser', JSON.stringify({name:user.displayName||user.email,email:user.email,photo:user.photoURL}));
+          showAdmin();
+          document.getElementById('adminCurrentEmail').textContent = user.email;
+        } else { sessionStorage.removeItem('adminAuth'); showLogin(); }
+      }).catch(function(){
+        // If rules block read (e.g., data still old format), try admin@seotools.com as fallback
+        if (user.email === 'admin@seotools.com') {
+          sessionStorage.setItem('adminAuth','true');
+          sessionStorage.setItem('adminUser', JSON.stringify({email:user.email}));
+          showAdmin();
+        } else { showLogin(); }
+      });
+    } else { showLogin(); }
+  }
+
+  if (typeof adminAuth !== 'undefined') {
+    loginTimer = setTimeout(function() { if (!checked) { checked = true; showLogin(); } }, 2000);
+    adminAuth.onAuthStateChanged(function(user) { verifyAdmin(user); });
+  } else { setTimeout(showLogin, 500); }
+
+  // Login button
+  document.getElementById('adminLoginBtn').addEventListener('click', function() {
+    var email = document.getElementById('adminEmail').value.trim();
+    var pass = document.getElementById('adminPass').value;
+    if (!email || !pass) { toast('Enter email and password.'); return; }
+    adminAuth.signInWithEmailAndPassword(email, pass)
+      .then(function() { /* onAuthStateChanged will handle verifyAdmin */ })
+      .catch(function(err) { toast(err.message); });
+  });
+
+  // Enter key
+  document.getElementById('adminPass').addEventListener('keypress', function(e) { if (e.key === 'Enter') document.getElementById('adminLoginBtn').click(); });
+  document.getElementById('adminEmail').addEventListener('keypress', function(e) { if (e.key === 'Enter') document.getElementById('adminPass').focus(); });
+
+  // --- Admin Functions ---
+  window.loadAdminData = function() {
+    var type = document.getElementById('adminDataType').value;
+    var thead = document.getElementById('adminDataThead');
+    var tbody = document.getElementById('adminDataTbody');
+    if (!adminDb) { tbody.innerHTML = '<tr><td style="text-align:center;color:var(--text-secondary)">Firebase not connected</td></tr>'; return; }
+    var headers = {projects:['User','Website','Status','Pages','Score'],keywords:['User','Keyword','Position','Change','Volume'],audits:['User','URL','SEO','Access.','Perf.','Date'],reports:['User','Name','Website','Type','Date']};
+    var hd = headers[type] || ['Key','Value'];
+    thead.innerHTML = '<tr>'+hd.map(function(h){return '<th>'+h+'</th>'}).join('')+'<th>Action</th></tr>';
+    tbody.innerHTML = '<tr><td colspan="'+(hd.length+1)+'" style="text-align:center;color:var(--text-secondary)">Loading...</td></tr>';
+    adminDb.ref('dashboard').once('value', function(snap) {
+      var allUsers = snap.val();
+      if (!allUsers) { tbody.innerHTML = '<tr><td colspan="'+(hd.length+1)+'" style="text-align:center;color:var(--text-secondary)">No data found</td></tr>'; return; }
+      var rows = [];
+      Object.keys(allUsers || {}).forEach(function(uid) {
+        var userData = allUsers[uid];
+        var items = userData[type];
+        if (!items) return;
+        Object.keys(items).forEach(function(k) {
+          var d = items[k];
+          if (type === 'projects') rows.push('<tr><td><small>'+uid.substring(0,8)+'..</small></td><td><strong>'+d.name+'</strong></td><td><span class="dash-status '+(d.status||'active').toLowerCase()+'">'+(d.status||'Active')+'</span></td><td>'+(d.pages||'—')+'</td><td>'+(d.score||'—')+'</td><td><button class="dash-table-btn" onclick="adminDeleteData(\''+uid+'\',\''+type+'\',\''+k+'\')"><i class="fas fa-trash"></i></button></td></tr>');
+          else if (type === 'keywords') rows.push('<tr><td><small>'+uid.substring(0,8)+'..</small></td><td><strong>'+d.keyword+'</strong></td><td>#'+(d.position||'—')+'</td><td>'+(d.change || 0)+'</td><td>'+(d.volume||'—')+'</td><td><button class="dash-table-btn" onclick="adminDeleteData(\''+uid+'\',\''+type+'\',\''+k+'\')"><i class="fas fa-trash"></i></button></td></tr>');
+          else if (type === 'audits') rows.push('<tr><td><small>'+uid.substring(0,8)+'..</small></td><td><small>'+d.url+'</small></td><td>'+d.seo+'</td><td>'+(d.accessibility||'—')+'</td><td>'+(d.performance||'—')+'</td><td><small>'+(d.date||'')+'</small></td><td><button class="dash-table-btn" onclick="adminDeleteData(\''+uid+'\',\''+type+'\',\''+k+'\')"><i class="fas fa-trash"></i></button></td></tr>');
+          else if (type === 'reports') rows.push('<tr><td><small>'+uid.substring(0,8)+'..</small></td><td><strong>'+d.name+'</strong></td><td><small>'+d.website+'</small></td><td>'+(d.type||'—')+'</td><td>'+(d.date||'')+'</td><td><button class="dash-table-btn" onclick="adminDeleteData(\''+uid+'\',\''+type+'\',\''+k+'\')"><i class="fas fa-trash"></i></button></td></tr>');
+        });
+      });
+      tbody.innerHTML = rows.length ? rows.join('') : '<tr><td colspan="'+(hd.length+1)+'" style="text-align:center;color:var(--text-secondary)">No data found</td></tr>';
+    }, function(err) {
+      tbody.innerHTML = '<tr><td colspan="'+(hd.length+1)+'" style="text-align:center;color:var(--error)">Error: ' + err.message + '</td></tr>';
+    });
+  };
+
+  window.adminDeleteData = function(uid, type, key) {
+    if (confirm('Delete this item?')) {
+      adminDb.ref('dashboard/'+uid+'/'+type+'/'+key).remove();
+      toast('Deleted!');
+      loadAdminData();
+    }
+  };
+
+  window.addAdminByEmail = function() {
+    var email = document.getElementById('adminNewEmail').value.trim();
+    if (!email) { toast('Enter email'); return; }
+    if (!adminDb) { toast('Firebase not connected'); return; }
+    adminDb.ref('admin/emails/' + email.replace(/\./g, ',')).set(true);
+    toast('Authorized: ' + email);
+    document.getElementById('adminNewEmail').value = '';
+    loadAdminUsers();
+  };
+
+  window.loadAdminUsers = function() {
+    var el = document.getElementById('adminUsersList');
+    if (!adminDb) { el.innerHTML = '<p style="color:var(--text-secondary)">Firebase not connected</p>'; return; }
+    adminDb.ref('admin/emails').once('value', function(snap) {
+      var emails = snap.val() || {};
+      var keys = Object.keys(emails);
+      if (!keys.length) { el.innerHTML = '<p style="color:var(--text-secondary)">No admin users configured</p>'; return; }
+      el.innerHTML = keys.map(function(e) {
+        return '<div class="dash-activity-item"><div class="dash-activity-dot" style="background:#2e7d32"></div><div><strong>'+e.replace(/,/g, '.')+'</strong><p>Admin</p></div></div>';
+      }).join('');
+    }, function(err) {
+      el.innerHTML = '<p style="color:var(--error)">Error: ' + err.message + '</p>';
+    });
+  };
+
+  window.loadAdminAnalytics = function() {
+    if (!adminDb) return;
+    adminDb.ref('analytics/tools').once('value', function(snap) {
+      var d = snap.val();
+      if (!d) return;
+      Object.keys(d).forEach(function(k) {
+        var el = document.getElementById('analytics_'+k);
+        if (el) el.textContent = d[k];
+      });
+    }, function(err) {
+      document.getElementById('adminAnalyticsData').innerHTML = '<p style="color:var(--error)">Error: ' + err.message + '</p>';
+    });
+  };
+
+  window.saveSettings = function() {
+    var name = document.getElementById('settingsSiteName').value.trim();
+    if (!adminDb) { toast('Firebase not connected'); return; }
+    adminDb.ref('admin/settings/siteName').set(name);
+    toast('Settings saved!');
+  };
+
+  window.adminLogout = function() {
+    sessionStorage.removeItem('adminAuth');
+    sessionStorage.removeItem('adminUser');
+    if (typeof adminAuth !== 'undefined') {
+      adminAuth.signOut().catch(function(){});
+    }
+    if (typeof firebase !== 'undefined' && firebase.auth) {
+      firebase.auth().signOut().catch(function(){});
+    }
+    showLogin();
+    toast('Logged out');
+  };
+
+  // Sidebar nav
+  var navLinks = document.querySelectorAll('#adminNav a');
+  var sections = document.querySelectorAll('.dash-section');
+  navLinks.forEach(function(link) {
+    link.addEventListener('click', function() {
+      var section = this.dataset.section;
+      navLinks.forEach(function(l) { l.classList.remove('active'); });
+      this.classList.add('active');
+      sections.forEach(function(s) { s.classList.remove('active'); });
+      var target = document.getElementById('admin-section-' + section);
+      if (target) target.classList.add('active');
+      document.getElementById('adminPageTitle').textContent = this.querySelector('span').textContent;
+      document.getElementById('adminSidebar').classList.remove('open');
+      if (section === 'data') setTimeout(loadAdminData, 100);
+      if (section === 'analytics') setTimeout(loadAdminAnalytics, 100);
+      if (section === 'users') setTimeout(loadAdminUsers, 100);
+    });
+  });
+
+  document.getElementById('adminMenuBtn').addEventListener('click', function() { document.getElementById('adminSidebar').classList.toggle('open'); });
+  document.getElementById('adminSidebarClose').addEventListener('click', function() { document.getElementById('adminSidebar').classList.remove('open'); });
+
+  // Theme
+  var t = localStorage.getItem('sTheme') || 'light';
+  document.documentElement.setAttribute('data-theme', t);
+  var tb = document.getElementById('adminThemeBtn');
+  if (tb) tb.innerHTML = t === 'dark' ? '<i class="fas fa-sun"></i>' : '<i class="fas fa-moon"></i>';
+})();
+
+function toggleAdminTheme() {
+  var html = document.documentElement;
+  var cur = html.getAttribute('data-theme');
+  var next = cur === 'light' ? 'dark' : 'light';
+  html.setAttribute('data-theme', next);
+  localStorage.setItem('sTheme', next);
+  document.getElementById('adminThemeBtn').innerHTML = next === 'dark' ? '<i class="fas fa-sun"></i>' : '<i class="fas fa-moon"></i>';
+}
+</script>
+<script>if("serviceWorker"in navigator){navigator.serviceWorker.register("/SEO-Tools-Engine-Pro/sw.js")}</script></body>
+</html>

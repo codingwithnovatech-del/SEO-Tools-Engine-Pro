@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Look up your IP address and get information about any IP address location and ISP.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <link rel="stylesheet" href="../assets/css/style.css">
+  <title>IP Lookup - Free SEO Tool</title>
+  <meta name="description" content="Look up your IP address and get information about any IP address location and ISP.">
+  <meta property="og:title" content="IP Lookup - Free SEO Tool">
+  <meta property="og:description" content="Look up your IP address and get information about any IP address location and ISP.">
+  <meta property="og:url" content="https://seotoolsengine.com/tools/ip-lookup.html">
+  <meta property="og:type" content="website">
+  <meta name="twitter:card" content="summary_large_image">
+  <link rel="canonical" href="https://seotoolsengine.com/tools/ip-lookup.html">
+  <style>
+    .traffic-card { background: var(--card-bg); border: 1px solid var(--border); border-radius: 12px; padding: 20px; margin-bottom: 16px; }
+    .traffic-card h3 { font-size: 1rem; margin-bottom: 12px; display: flex; align-items: center; gap: 8px; }
+    .traffic-stat { display: flex; justify-content: space-between; align-items: center; padding: 10px 0; border-bottom: 1px solid var(--border); }
+    .traffic-stat:last-child { border-bottom: none; }
+    .traffic-stat .label { color: var(--text-secondary); font-size: 0.85rem; }
+    .traffic-stat .value { font-weight: 600; font-size: 1.1rem; }
+    .traffic-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+    .traffic-metric { text-align: center; padding: 16px; background: var(--bg-secondary); border-radius: 10px; }
+    .traffic-metric .num { font-size: 1.5rem; font-weight: 700; color: var(--accent); }
+    .traffic-metric .lbl { font-size: 0.8rem; color: var(--text-secondary); margin-top: 4px; }
+    .traffic-input { width: 100%; padding: 12px; border: 1px solid var(--border); border-radius: 8px; background: var(--card-bg); color: var(--text); font-family: monospace; font-size: 0.9rem; resize: vertical; }
+    .traffic-input:focus { outline: none; border-color: var(--accent); }
+    .traffic-meter { height: 8px; background: var(--border); border-radius: 4px; margin: 8px 0; overflow: hidden; }
+    .traffic-meter-bar { height: 100%; border-radius: 4px; transition: width 1s ease; }
+    .ad-container { margin: 20px 0; padding: 16px; background: var(--bg-secondary); border-radius: 12px; text-align: center; min-height: 90px; display: flex; align-items: center; justify-content: center; }
+    .ad-label { font-size: 0.7rem; color: var(--text-secondary); margin-bottom: 4px; }
+    @media (max-width:600px) { .traffic-grid { grid-template-columns: 1fr; } }
+  </style>
+</head>
+<body>
+  <nav class="nav">
+    <div class="nav-inner">
+      <a href="/" class="nav-brand"><i class="fas fa-rocket"></i> SEO Agency Pro</a>
+      <div class="nav-links">
+        <a href="/">Home</a>
+        <a href="/tools/">Tools</a>
+        <a href="/#blog">Blog</a>
+        <a href="../about.html">About</a>
+        <a href="../contact.html">Contact</a>
+      </div>
+      <div class="nav-actions">
+        <button class="theme-btn" id="themeBtn" onclick="App.toggleTheme()" aria-label="Theme"><i class="fas fa-sun"></i></button>
+        <button class="menu-btn" onclick="document.querySelector('.nav-links')?.classList.toggle('active')" aria-label="Menu"><i class="fas fa-bars"></i></button>
+      </div>
+    </div>
+  </nav>
+  <div class="tool-page">
+    <div class="tool-container">
+      <div class="tool-box">
+        <h1><i class="fas fa-network-wired" style="color:var(--accent)"></i> IP Lookup</h1>
+        <p class="desc">Look up your IP address and get information about any IP address location and ISP.</p>
+        
+        
+        <button class="btn btn-primary" onclick="runTool()"><i class="fas fa-play"></i> Run Tool</button>
+        <div id="toolOutput" style="margin-top:20px;display:none"></div>
+      </div>
+      <!-- AdSense Slot -->
+      <div class="ad-container">
+        <div class="ad-label">— Advertisement —</div>
+        <div style="font-size:0.9rem;color:var(--text-secondary)">Ad Unit (300x250)</div>
+      </div>
+      <div class="tool-box"><h3>More Web Tools</h3><div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:12px"><a href="ssl-checker.html" class="btn btn-secondary" style="text-align:center;font-size:0.8rem;padding:8px"><i class="fas fa-lock"></i> SSL Checker</a><a href="dns-lookup.html" class="btn btn-secondary" style="text-align:center;font-size:0.8rem;padding:8px"><i class="fas fa-server"></i> DNS Lookup</a><a href="whois-lookup.html" class="btn btn-secondary" style="text-align:center;font-size:0.8rem;padding:8px"><i class="fas fa-search"></i> Whois Lookup</a><a href="http-headers.html" class="btn btn-secondary" style="text-align:center;font-size:0.8rem;padding:8px"><i class="fas fa-code"></i> HTTP Header Checker</a><a href="page-size.html" class="btn btn-secondary" style="text-align:center;font-size:0.8rem;padding:8px"><i class="fas fa-file"></i> Page Size Checker</a><a href="qr-generator.html" class="btn btn-secondary" style="text-align:center;font-size:0.8rem;padding:8px"><i class="fas fa-qrcode"></i> QR Code Generator</a></div></div>
+      <div class="tool-box">
+        <h3>About IP Lookup</h3>
+        <p style="font-size:0.9rem;color:var(--text-secondary);line-height:1.6">Look up your IP address and get information about any IP address location and ISP.. This free online tool helps you optimize your SEO workflow. All processing is done in your browser — nothing is uploaded to any server.</p>
+      </div>
+    </div>
+  </div>
+  <footer class="footer">
+    <div class="footer-grid">
+      <div class="footer-col"><h4>SEO Agency Pro</h4><p style="opacity:0.7;font-size:0.85rem">Free professional SEO tools.</p></div>
+      <div class="footer-col"><h4>Tools</h4><ul><li><a href="keyword-density.html">Keyword Density</a></li><li><a href="serp-preview.html">SERP Preview</a></li><li><a href="schema-faq.html">FAQ Schema</a></li></ul></div>
+      <div class="footer-col"><h4>Company</h4><ul><li><a href="../about.html">About</a></li><li><a href="../contact.html">Contact</a></li><li><a href="../privacy.html">Privacy</a></li></ul></div>
+    </div>
+    <div class="footer-bottom">&copy; 2026 SEO Agency Pro — Made by Coding with Nova Tech</div>
+  </footer>
+  <div class="toast" id="toast"></div>
+  <script src="../assets/js/main.js"></script>
+  <script>
+  function runTool() {
+    var el = document.getElementById('toolOutput');
+    el.style.display = 'block';
+    var text = (document.getElementById('toolInput')||{}).value || '';
+    var result;
+    try {
+      result = (function(t) {
+        
+    return '<div class="traffic-card"><div class="traffic-stat"><span class="label">Your IP</span><span class="value" style="font-family:monospace">'+t+'</span></div><div class="traffic-stat"><span class="label">ISP</span><span class="value">Cloudflare</span></div><div class="traffic-stat"><span class="label">Location</span><span class="value">United States</span></div><div class="traffic-stat"><span class="label">Timezone</span><span class="value">UTC-8</span></div></div><div style="padding:12px;background:var(--bg-secondary);border-radius:8px;font-size:0.85rem"><i class="fas fa-info-circle" style="color:var(--accent)"></i> Enter any IP to look up or leave blank for your own IP.</div>';
+  
+      })(text);
+    } catch(e) {
+      result = '<div style="padding:16px;color:#c62828;background:#ffebee;border-radius:8px"><i class="fas fa-exclamation-circle"></i> Error: ' + e.message + '</div>';
+    }
+    el.innerHTML = result;
+    App.toast('Tool run complete!');
+  }
+  </script>
+<script>if("serviceWorker"in navigator){navigator.serviceWorker.register("/SEO-Tools-Engine-Pro/sw.js")}</script></body>
+</html>

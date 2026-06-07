@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="SEO Agency Pro - Free SEO tools including SEO Score Checker, Keyword Generator, Meta Tag Generator, Word Counter, Sitemap Generator and more.">
+  <meta name="keywords" content="SEO tools, free seo tools, keyword generator, meta tag generator, word counter, sitemap generator, robots.txt generator">
+  <meta name="robots" content="index, follow">
+  <meta property="og:title" content="SEO Agency Pro - Free SEO Tools Online">
+  <meta property="og:description" content="Free SEO tools to improve your website ranking. SEO Score Checker, Keyword Generator, Meta Tags and more.">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://seotoolsengine.com/">
+  <meta name="twitter:card" content="summary_large_image">
+  <link rel="canonical" href="https://seotoolsengine.com/">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <link rel="stylesheet" href="assets/css/style.css">
+  
+  <link rel='icon' type='image/svg+xml' href='favicon.svg'>
+  <link rel='alternate-icon' href='favicon.svg'>
+  <link rel="manifest" href="/manifest.json">
+  <title>SEO Agency Pro - Free SEO Tools Online</title>
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-JL9JZTFZYH"></script>
+  <script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-JL9JZTFZYH');</script>
+  <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-database.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-firestore.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-auth.js"></script>
+  <script src="assets/js/firebase-config.js"></script>
+  <script>
+    if (typeof firebase !== 'undefined' && firebase.auth) {
+      firebase.auth().onAuthStateChanged(function(user) {
+        var link = document.querySelector('a[href="login.html"]');
+        if (link) {
+          if (user) { link.innerHTML = '<i class="fas fa-th-large"></i> Dashboard'; link.href = 'dashboard.html'; }
+          else { link.innerHTML = '<i class="fas fa-user"></i> Sign In'; link.href = 'login.html'; }
+        }
+      });
+    }
+  </script>
+  <script type="application/ld+json">
+  [{
+    "@context": "https://schema.org",
+    "@type": "WebSite",
+    "name": "SEO Tools Engine Pro",
+    "url": "https://seotoolsengine.com/",
+    "description": "Free SEO tools and resources",
+    "potentialAction": { "@type": "SearchAction", "target": "https://seotoolsengine.com/?q={search_term_string}", "query-input": "required name=search_term_string" }
+  },{
+    "@context": "https://schema.org",
+    "@type": "WebApplication",
+    "name": "SEO Tools Engine Pro",
+    "operatingSystem": "All",
+    "applicationCategory": "Utilities",
+    "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" }
+  }]
+  </script>
+<meta name="referrer" content="no-referrer-when-downgrade" />
+
+<!-- Bidvertiser2105042 --></head>
+<body>
+  <nav class="nav">
+    <div class="nav-inner">
+      <a href="/" class="nav-brand"><i class="fas fa-rocket"></i> SEO Agency Pro</a>
+      <div class="nav-links">
+        <a href="/">Home</a>
+        <a href="#tools">Tools</a>
+        <a href="#blog">Blog</a>
+        <a href="about.html">About</a>
+        <a href="contact.html">Contact</a>
+        <a href="login.html" style="color:var(--accent)"><i class="fas fa-user"></i> Sign In</a>
+      </div>
+      <div class="nav-actions">
+        <button class="theme-btn" id="themeBtn" onclick="App.toggleTheme()" aria-label="Theme"><i class="fas fa-sun"></i></button>
+        <button class="menu-btn" id="menuBtn" aria-label="Menu"><i class="fas fa-bars"></i></button>
+      </div>
+    </div>
+  </nav>
+
+  <main>
+    <section class="hero">
+      <h1>Free <span>SEO Tools</span> to Boost Your Rankings</h1>
+      <p>Professional SEO tools to analyze, optimize, and grow your website traffic. 100% free, no signup required.</p>
+      <div class="hero-search">
+        <i class="fas fa-search"></i>
+        <input type="search" id="searchInput" placeholder="Search tools..." aria-label="Search tools">
+      </div>
+      <div class="stats"></div>
+    </section>
+
+    <div class="ad">Adsterra Banner 728x90</div>
+
+    <section class="section" id="tools">
+      <div class="section-header">
+        <h2>Our SEO Tools</h2>
+        <p>Professional tools to analyze and improve your website's search engine performance</p>
+      </div>
+      <div class="tools-grid"></div>
+    </section>
+
+    <div class="ad">Adsterra Native Ad</div>
+
+    <section class="section features-alt" id="features">
+      <div class="section-header">
+        <h2>Why SEO Tools Engine Pro?</h2>
+        <p>Built for bloggers, marketers, and SEO professionals</p>
+      </div>
+      <div class="features-grid">
+        <div class="feature-card"><i class="fas fa-bolt"></i><h3>Lightning Fast</h3><p>Results in milliseconds with client-side processing</p></div>
+        <div class="feature-card"><i class="fas fa-shield-alt"></i><h3>100% Free</h3><p>No hidden charges, no signup, unlimited usage</p></div>
+        <div class="feature-card"><i class="fas fa-mobile-alt"></i><h3>Mobile Friendly</h3><p>Works perfectly on all devices and screen sizes</p></div>
+        <div class="feature-card"><i class="fas fa-chart-line"></i><h3>SEO Optimized</h3><p>Built by SEO experts for maximum effectiveness</p></div>
+      </div>
+    </section>
+
+    <div class="ad">PropellerAds Banner</div>
+
+    <section class="section" id="blog">
+      <div class="section-header">
+        <h2>SEO Blog & Guides</h2>
+        <p>Learn SEO with our comprehensive guides and tutorials</p>
+      </div>
+      <div class="blog-grid"></div>
+      <div style="text-align:center;margin-top:32px">
+        <a href="blog/" class="btn btn-primary" style="display:inline-flex;align-items:center;gap:8px;padding:12px 28px"><i class="fas fa-book-open"></i> Browse All 60+ Articles</a>
+      </div>
+    </section>
+
+    <section class="section features-alt">
+      <div class="section-header"><h2>What Our Users Say</h2></div>
+      <div class="testimonials">
+        <div class="testimonial">
+          <div class="stars"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i></div>
+          <p>"The keyword generator is amazing! Found hundreds of keywords for my blog in seconds."</p>
+          <div class="author"><div class="avatar">RK</div><div><strong>Rahul K.</strong><br><span style="font-size:0.8rem;color:var(--text-secondary)">Blogger</span></div></div>
+        </div>
+        <div class="testimonial">
+          <div class="stars"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i></div>
+          <p>"Best free SEO tools I've found online. The meta tag generator saves me so much time!"</p>
+          <div class="author"><div class="avatar">SP</div><div><strong>Sara P.</strong><br><span style="font-size:0.8rem;color:var(--text-secondary)">Digital Marketer</span></div></div>
+        </div>
+        <div class="testimonial">
+          <div class="stars"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i></div>
+          <p>"Simple, clean, and effective. These tools helped me improve my site's SEO score significantly."</p>
+          <div class="author"><div class="avatar">AM</div><div><strong>Anita M.</strong><br><span style="font-size:0.8rem;color:var(--text-secondary)">Website Owner</span></div></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="section-header"><h2>Frequently Asked Questions</h2></div>
+      <div class="faq">
+        <div class="faq-item">
+          <button class="faq-q">Are these SEO tools really free? <i class="fas fa-chevron-down"></i></button>
+          <div class="faq-a">Yes, all tools are completely free with no usage limits or hidden charges.</div>
+        </div>
+        <div class="faq-item">
+          <button class="faq-q">Do I need to sign up? <i class="fas fa-chevron-down"></i></button>
+          <div class="faq-a">No signup required. Just open and use any tool instantly.</div>
+        </div>
+        <div class="faq-item">
+          <button class="faq-q">How accurate is the SEO Score Checker? <i class="fas fa-chevron-down"></i></button>
+          <div class="faq-a">It provides a solid estimate based on common SEO factors. For full analysis, combine with Google Search Console.</div>
+        </div>
+        <div class="faq-item">
+          <button class="faq-q">Can I use these tools for any website? <i class="fas fa-chevron-down"></i></button>
+          <div class="faq-a">Yes, all tools work for any website regardless of platform or CMS.</div>
+        </div>
+      </div>
+    </section>
+
+    <section class="newsletter features-alt">
+      <div class="newsletter-inner">
+        <h3>Get SEO Tips & Updates</h3>
+        <p>Subscribe to receive weekly SEO guides, tips, and new tool announcements.</p>
+        <form class="newsletter-form" onsubmit="event.preventDefault();App.toast('Subscribed!');this.reset()">
+          <input type="email" placeholder="Enter your email" required>
+          <button type="submit">Subscribe</button>
+        </form>
+      </div>
+    </section>
+  </main>
+  <footer class="footer">
+    <div class="footer-grid">
+      <div class="footer-col">
+        <h4><i class="fas fa-rocket" style="color:var(--accent)"></i> SEO Agency Pro</h4>
+        <p style="opacity:0.7;font-size:0.85rem">Free professional SEO tools to help you rank higher on Google.</p>
+      </div>
+      <div class="footer-col">
+        <h4>Tools</h4>
+        <ul>
+          <li><a href="tools/seo-score.html">SEO Score Checker</a></li>
+          <li><a href="tools/keyword-generator.html">Keyword Generator</a></li>
+          <li><a href="tools/meta-generator.html">Meta Tag Generator</a></li>
+          <li><a href="tools/word-counter.html">Word Counter</a></li>
+          <li><a href="tools/sitemap-generator.html">Sitemap Generator</a></li>
+          <li><a href="tools/robots-generator.html">Robots.txt Generator</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4>Company</h4>
+        <ul>
+          <li><a href="about.html">About Us</a></li>
+          <li><a href="contact.html">Contact Us</a></li>
+          <li><a href="privacy.html">Privacy Policy</a></li>
+          <li><a href="disclaimer.html">Disclaimer</a></li>
+          <li><a href="terms.html">Terms</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">&copy; 2026 SEO Agency Pro. All rights reserved. | <a href="privacy.html">Privacy</a> | <a href="terms.html">Terms</a></div>
+  </footer>
+
+  <div class="toast" id="toast"></div>
+    <script src="assets/js/main.js"></script>
+      <div class="girl-wrap" id="girlWrap">
+    <div class="girl-3d" id="girl3d">
+      <div class="girl-glow"></div>
+      <div class="girl-ring"></div>
+      <img class="girl-avatar" id="girlAvatar" src="https://i.ibb.co/4ZXZGR0v/magnific-character-design-sheet-cu-y6q-MDQAPW9.png" alt="Support">
+      <div class="girl-badge"><i class="fas fa-headset"></i></div>
+    </div>
+    <div class="girl-shadow"></div>
+  </div>
+  <div class="girl-speech" id="girlSpeech">
+    <div class="speech-msg" id="girlSpeechMsg">Hi! I'm Priya, your support assistant! ?????</div>
+  </div>
+<script>if("serviceWorker"in navigator){navigator.serviceWorker.register("/SEO-Tools-Engine-Pro/sw.js")}</script></body>
+</html>
+
+
+
+
+
+

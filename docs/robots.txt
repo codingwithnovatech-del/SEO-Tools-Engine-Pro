@@ -1,0 +1,5 @@
+User-agent: *
+Allow: /
+Disallow: /admin.html
+Disallow: /assets/
+Sitemap: https://seotoolsengine.com/sitemap.xml

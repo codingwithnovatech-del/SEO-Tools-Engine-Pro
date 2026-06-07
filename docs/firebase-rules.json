@@ -1,0 +1,96 @@
+{
+  "rules": {
+    "admin": {
+      "emails": {
+        ".read": "auth != null",
+        ".write": "auth != null && root.child('admin/emails').child(auth.token.email.replace('.', ',')).val() === true"
+      },
+      "settings": {
+        ".read": true,
+        ".write": "auth != null && root.child('admin/emails').child(auth.token.email.replace('.', ',')).val() === true"
+      }
+    },
+    "contacts": {
+      ".read": "auth != null && root.child('admin/emails').child(auth.token.email.replace('.', ',')).val() === true",
+      ".write": "auth != null",
+      "$messageId": {
+        ".validate": "newData.hasChildren(['name', 'email', 'message', 'date'])"
+      }
+    },
+    "analytics": {
+      "tools": {
+        ".read": "auth != null && root.child('admin/emails').child(auth.token.email.replace('.', ',')).val() === true",
+        ".write": true,
+        "$tool": {
+          ".validate": "newData.isNumber()"
+        }
+      }
+    },
+    "dashboard": {
+      "$uid": {
+        ".read": "auth != null && (auth.uid === $uid || root.child('admin/emails').child(auth.token.email.replace('.', ',')).val() === true)",
+        ".write": "auth != null && (auth.uid === $uid || root.child('admin/emails').child(auth.token.email.replace('.', ',')).val() === true)",
+        "projects": {
+          "$projectId": {
+            ".validate": "newData.hasChildren(['name', 'website', 'createdAt'])",
+            "name": { ".validate": "newData.isString() && newData.val().length <= 200" },
+            "website": { ".validate": "newData.isString() && newData.val().length <= 500" },
+            "targetKeyword": { ".validate": "newData.isString()" },
+            "status": { ".validate": "newData.isString()" },
+            "pages": { ".validate": "newData.isNumber()" },
+            "score": { ".validate": "newData.isNumber()" },
+            "createdAt": { ".validate": "newData.isString()" },
+            "$other": { ".validate": false }
+          }
+        },
+        "keywords": {
+          "$keywordId": {
+            "keyword": { ".validate": "newData.isString() && newData.val().length <= 200" },
+            "position": { ".validate": "newData.isNumber()" },
+            "change": { ".validate": "newData.isNumber()" },
+            "volume": { ".validate": "newData.isString()" },
+            "difficulty": { ".validate": "newData.isNumber()" },
+            "lastUpdated": { ".validate": "newData.isString()" },
+            "$other": { ".validate": false }
+          }
+        },
+        "audits": {
+          "$auditId": {
+            "url": { ".validate": "newData.isString()" },
+            "seo": { ".validate": "newData.isNumber()" },
+            "accessibility": { ".validate": "newData.isNumber()" },
+            "performance": { ".validate": "newData.isNumber()" },
+            "bestPractices": { ".validate": "newData.isNumber()" },
+            "date": { ".validate": "newData.isString()" },
+            "$other": { ".validate": false }
+          }
+        },
+        "reports": {
+          "$reportId": {
+            "name": { ".validate": "newData.isString()" },
+            "website": { ".validate": "newData.isString()" },
+            "type": { ".validate": "newData.isString()" },
+            "format": { ".validate": "newData.isString()" },
+            "date": { ".validate": "newData.isString()" },
+            "$other": { ".validate": false }
+          }
+        },
+        "notifications": {
+          "$notificationId": {
+            "title": { ".validate": "newData.isString()" },
+            "message": { ".validate": "newData.isString()" },
+            "read": { ".validate": "newData.isBoolean()" },
+            "timestamp": { ".validate": "newData.isString()" },
+            "$other": { ".validate": false }
+          }
+        },
+        "profile": {
+          "company": { ".validate": "newData.isString()" },
+          "phone": { ".validate": "newData.isString()" },
+          "timezone": { ".validate": "newData.isString()" },
+          "$other": { ".validate": false }
+        }
+      }
+    }
+  }
+}

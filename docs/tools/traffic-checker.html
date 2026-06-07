@@ -1,0 +1,334 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="robots" content="index, follow">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <link rel="stylesheet" href="../assets/css/style.css">
+  <title>Website Traffic Checker - Free Traffic Estimation Tool</title>
+  <meta name="description" content="Free online traffic checker tool.">
+  <meta property="og:title" content="Website Traffic Checker - Free Traffic Estimation Tool">
+  <meta property="og:description" content="Free online traffic checker tool.">
+  <meta property="og:url" content="https://seotoolsengine.com/tools/traffic-checker.html">
+  <meta property="og:type" content="website">
+  <meta name="twitter:card" content="summary_large_image">
+  <link rel="canonical" href="https://seotoolsengine.com/tools/traffic-checker.html">
+  <style>
+    .traffic-card { background: var(--card-bg); border: 1px solid var(--border); border-radius: 12px; padding: 20px; margin-bottom: 16px; }
+    .traffic-card h3 { font-size: 1rem; margin-bottom: 12px; display: flex; align-items: center; gap: 8px; }
+    .traffic-stat { display: flex; justify-content: space-between; align-items: center; padding: 10px 0; border-bottom: 1px solid var(--border); }
+    .traffic-stat:last-child { border-bottom: none; }
+    .traffic-stat .label { color: var(--text-secondary); font-size: 0.85rem; }
+    .traffic-stat .value { font-weight: 600; font-size: 1.1rem; }
+    .traffic-meter { height: 8px; background: var(--border); border-radius: 4px; margin: 8px 0; overflow: hidden; }
+    .traffic-meter-bar { height: 100%; border-radius: 4px; transition: width 1s ease; }
+    .traffic-badge { display: inline-block; padding: 4px 12px; border-radius: 20px; font-size: 0.8rem; font-weight: 600; }
+    .traffic-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+    .traffic-metric { text-align: center; padding: 16px; background: var(--bg-secondary); border-radius: 10px; }
+    .traffic-metric .num { font-size: 1.5rem; font-weight: 700; color: var(--accent); }
+    .traffic-metric .lbl { font-size: 0.8rem; color: var(--text-secondary); margin-top: 4px; }
+    @media (max-width:600px) { .traffic-grid { grid-template-columns: 1fr; } }
+  </style>
+</head>
+<body>
+  <nav class="nav">
+    <div class="nav-inner">
+      <a href="/" class="nav-brand"><i class="fas fa-rocket"></i> SEO Agency Pro</a>
+      <div class="nav-links">
+        <a href="/">Home</a>
+        <a href="/#tools">Tools</a>
+        <a href="/#blog">Blog</a>
+        <a href="../about.html">About</a>
+        <a href="../contact.html">Contact</a>
+      </div>
+      <div class="nav-actions">
+        <button class="theme-btn" id="themeBtn" onclick="App.toggleTheme()" aria-label="Theme"><i class="fas fa-sun"></i></button>
+        <button class="menu-btn" onclick="document.querySelector('.nav-links')?.classList.toggle('active')" aria-label="Menu"><i class="fas fa-bars"></i></button>
+      </div>
+    </div>
+  </nav>
+  <div class="tool-page">
+    <div class="tool-container">
+      <div class="tool-box">
+        <h1>Website Traffic Checker</h1>
+        <p class="desc">Estimate monthly website traffic, page views, bounce rate, and engagement metrics for any website. Get insights on visitor behavior and traffic sources.</p>
+        <div class="form-group"><label>Enter Website URL</label><input type="url" id="trafficUrl" placeholder="https://example.com" value="https://google.com"></div>
+        <button class="btn btn-primary" onclick="checkTraffic()"><i class="fas fa-chart-line"></i> Analyze Traffic</button>
+        <div id="trafficResult" style="display:none;margin-top:20px"></div>
+        <div class="btn-group" style="margin-top:16px">
+          <button class="btn btn-secondary" onclick="App.toast('Share link copied!')"><i class="fas fa-share-alt"></i> Share</button>
+        </div>
+      </div>
+      <div class="tool-box">
+        <h3>Website Traffic Checker - FAQ</h3>
+        <div class="faq"><div class="faq-item"><button class="faq-q">What data is real vs estimated? <i class="fas fa-chevron-down"></i></button><div class="faq-a"><b>Live data:</b> FCP/Performance from Google PageSpeed Insights, Domain Rating from Open PageRank. <b>Estimated:</b> Organic traffic, keywords, top countries, traffic value — these require paid APIs (Ahrefs, SEMrush).</div></div><div class="faq-item"><button class="faq-q">Why does my free domain show no DR? <i class="fas fa-chevron-down"></i></button><div class="faq-a">Free domains (free.nf, blogspot, etc.) are rarely indexed enough for PageRank data. Our estimation still provides realistic low-range values.</div></div></div>
+      </div>
+      <div class="tool-box">
+        <h3>Related Tools</h3>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:12px">
+          <a href='seo-score.html' style='padding:10px;border:1px solid var(--border);border-radius:8px;text-align:center;font-size:0.85rem'>SEO Score</a>
+          <a href='keyword-generator.html' style='padding:10px;border:1px solid var(--border);border-radius:8px;text-align:center;font-size:0.85rem'>Keyword Generator</a>
+          <a href='meta-generator.html' style='padding:10px;border:1px solid var(--border);border-radius:8px;text-align:center;font-size:0.85rem'>Meta Tag Generator</a>
+          <a href='sitemap-generator.html' style='padding:10px;border:1px solid var(--border);border-radius:8px;text-align:center;font-size:0.85rem'>Sitemap Generator</a>
+          <a href='traffic-checker.html' style='padding:10px;border:1px solid var(--border);border-radius:8px;text-align:center;font-size:0.85rem'>Traffic Checker</a>
+        </div>
+      </div>
+    </div>
+  </div>
+  <footer class="footer">
+    <div class="footer-grid">
+      <div class="footer-col"><h4>SEO Tools Engine Pro</h4><p style="opacity:0.7;font-size:0.85rem">Free professional SEO tools.</p></div>
+      <div class="footer-col"><h4>Tools</h4><ul><li><a href="seo-score.html">SEO Score</a></li><li><a href="keyword-generator.html">Keyword Generator</a></li><li><a href="traffic-checker.html">Traffic Checker</a></li></ul></div>
+      <div class="footer-col"><h4>Company</h4><ul><li><a href="../about.html">About</a></li><li><a href="../contact.html">Contact</a></li><li><a href="../privacy.html">Privacy</a></li></ul></div>
+    </div>
+    <div class="footer-bottom">&copy; 2026 SEO Tools Engine Pro — Made by Coding with Nova Tech</div>
+  </footer>
+  <div class="toast" id="toast"></div>
+  <script src="../assets/js/main.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-database.js"></script>
+  <script src="../assets/js/firebase-config.js"></script>
+  <style>.real-badge{display:inline-flex;align-items:center;gap:4px;background:#e8f5e9;color:#2e7d32;font-size:0.65rem;padding:2px 8px;border-radius:10px;font-weight:600}.live-badge{display:inline-flex;align-items:center;gap:4px;background:#e3f2fd;color:#1565c0;font-size:0.65rem;padding:2px 8px;border-radius:10px;font-weight:600}.api-status{display:flex;gap:12px;margin-top:8px;flex-wrap:wrap}.api-status-item{font-size:0.75rem;padding:4px 12px;border-radius:20px;background:var(--bg-secondary);color:var(--text-secondary)}.api-status-item.loading{background:#fff3e0;color:#e65100}.api-status-item.done{background:#e8f5e9;color:#2e7d32}.api-status-item.fail{background:#ffebee;color:#c62828}</style>
+  <script>
+  var _data = null;
+
+  function estimateTrafficData(domain, opts) {
+    opts = opts || {};
+    var hash = 0;
+    for (var i = 0; i < domain.length; i++) { hash = ((hash << 5) - hash) + domain.charCodeAt(i); hash |= 0; }
+    var seed = Math.abs(hash);
+    function r() { seed = (seed * 1103515245 + 12345) & 0x7fffffff; return seed / 0x7fffffff; }
+    var isFree = domain.indexOf('free.nf') > -1 || domain.indexOf('blogspot') > -1 || domain.indexOf('wordpress') > -1 || domain.indexOf('weebly') > -1 || domain.indexOf('wixsite') > -1;
+    var isKnown = domain.indexOf('google') > -1 || domain.indexOf('facebook') > -1 || domain.indexOf('youtube') > -1 || domain.indexOf('amazon') > -1 || domain.indexOf('twitter') > -1 || domain.indexOf('instagram') > -1 || domain.indexOf('linkedin') > -1 || domain.indexOf('wikipedia') > -1;
+    var dr = opts.realDr !== undefined ? opts.realDr : (isKnown ? 85 + r() * 14 : isFree ? 3 + r() * 10 : 20 + r() * 55);
+    var ur = opts.realUr !== undefined ? opts.realUr : Math.floor(dr * (0.6 + r() * 0.35));
+    var perf = opts.perfScore !== undefined ? opts.perfScore : 50 + r() * 50;
+    var drFactor = dr / 100;
+    var monthlyVisits;
+    if (opts.realDr !== undefined) {
+      monthlyVisits = isKnown ? Math.floor(20000000 + drFactor * 600000000) : isFree ? Math.floor(20 + dr * 8) : Math.floor(100 + drFactor * drFactor * 300000);
+    } else {
+      monthlyVisits = isKnown ? Math.floor(50000000 + r() * 500000000) : isFree ? Math.floor(50 + r() * 3000) : Math.floor(200 + drFactor * drFactor * 200000);
+    }
+    var organicPct = 0.3 + (perf / 100) * 0.2;
+    var organicTraffic = Math.floor(monthlyVisits * organicPct);
+    var trafficValue = Math.floor(organicTraffic * (1.5 + (perf / 100) * 5));
+    var pagesPerVisit = Math.round((isKnown ? 2 + (perf/100)*4 : 1 + (perf/100)*2) * 10) / 10;
+    var bounceRate = Math.round(isKnown ? 55 - (perf/100)*25 : 65 - (perf/100)*15);
+    var avgSession = Math.floor(isKnown ? 60 + (perf/100)*300 : 20 + (perf/100)*100);
+    var pageViews = Math.floor(monthlyVisits * pagesPerVisit);
+    var countryList = isKnown ? [{c:'India',p:35},{c:'United States',p:20},{c:'Spain',p:8},{c:'Nigeria',p:6},{c:'South Africa',p:5},{c:'United Kingdom',p:5},{c:'Germany',p:4},{c:'Brazil',p:3}] : [{c:'United States',p:30},{c:'India',p:15},{c:'United Kingdom',p:10},{c:'Canada',p:7},{c:'Australia',p:5},{c:'Germany',p:4},{c:'France',p:3},{c:'Brazil',p:3}];
+    var countries = countryList.map(function(x) { return { name: x.c, pct: Math.round(x.p + r() * 6 - 3) }; });
+    var t = countries.reduce(function(a,b){return a+b.pct;},0);
+    countries = countries.map(function(x) { return { name: x.name, pct: Math.round(x.pct / t * 100) }; });
+    var kwTemplates = isKnown ? [{k:'search',v:271000},{k:'google',v:5000},{k:'online',v:3100},{k:'web',v:1600}] : isFree ? [{k:domain.split('.')[0],v:Math.floor(10+r()*60)},{k:'free',v:Math.floor(5+r()*30)},{k:'home',v:Math.floor(3+r()*15)}] : [{k:domain.split('.')[0],v:Math.floor(100+r()*500)},{k:'home',v:Math.floor(50+r()*200)},{k:'info',v:Math.floor(30+r()*100)}];
+    var keywords = kwTemplates.map(function(x) { return { keyword: x.k, pos: Math.floor(1 + r() * 18), vol: x.v }; });
+    var sources = [{n:'Direct',p:22},{n:'Organic Search',p:42},{n:'Social Media',p:16},{n:'Referral',p:10},{n:'Email',p:6},{n:'Paid Ads',p:4}];
+    var srcData = sources.map(function(s) { return { name: s.n, pct: Math.round(s.p + r() * 6 - 3) }; });
+    var st = srcData.reduce(function(a,b){return a+b.pct;},0);
+    srcData = srcData.map(function(s) { return { name: s.name, pct: Math.round(s.pct / st * 100) }; });
+    return {
+      domain: domain, monthlyVisits: monthlyVisits, organicTraffic: organicTraffic,
+      trafficValue: trafficValue, pageViews: pageViews,
+      pagesPerVisit: pagesPerVisit, bounceRate: bounceRate,
+      avgSession: avgSession, dr: Math.round(dr), ur: Math.round(ur),
+      perfScore: Math.round(perf), topCountries: countries, topKeywords: keywords,
+      trafficSources: srcData, loadTime: (1.2 + r() * 4.5).toFixed(1),
+      pagesIndexed: Math.floor(dr * dr * 3 + r() * 10000),
+      isFreeDomain: isFree, isKnown: isKnown,
+      realDr: opts.realDr !== undefined, realPerf: opts.perfScore !== undefined
+    };
+  }
+
+  function formatNum(n) {
+    if (n >= 1000000) return (n / 1000000).toFixed(1) + 'M';
+    if (n >= 1000) return (n / 1000).toFixed(1) + 'K';
+    return n.toString();
+  }
+
+  function renderCard(domain) {
+    var d = _data, h = d.dr > 40;
+    var drc = d.dr > 60 ? '#2e7d32' : d.dr > 30 ? '#e65100' : '#c62828';
+    var ch = d.topCountries.slice(0, 5).map(function(c) {
+      return '<div class="traffic-stat"><span class="label"><i class="fas fa-map-pin" style="color:var(--accent);width:16px"></i> ' + c.name + '</span><span class="value">' + c.pct + '%</span></div>';
+    }).join('');
+    var kh = d.topKeywords.slice(0, 4).map(function(kw, i) {
+      var rc = kw.pos <= 3 ? '#2e7d32' : kw.pos <= 10 ? '#1565c0' : '#e65100';
+      return '<div class="traffic-stat"><span class="label">#' + (i+1) + ' <strong>' + kw.keyword + '</strong></span><span style="display:flex;gap:12px;align-items:center"><span class="traffic-badge" style="background:' + rc + '20;color:' + rc + ';font-size:0.7rem">#' + kw.pos + '</span><span style="font-weight:600;font-size:0.85rem">' + formatNum(kw.vol) + '</span></span></div>';
+    }).join('');
+    var sh = d.trafficSources.slice(0, 4).map(function(s) {
+      return '<div class="traffic-stat"><span class="label">' + s.name + '</span><span class="value">' + s.pct + '%</span></div>';
+    }).join('');
+    var prc = d.perfScore > 70 ? '#2e7d32' : d.perfScore > 40 ? '#e65100' : '#c62828';
+    var drNote = d.realDr ? ' <span class="real-badge"><i class="fas fa-check-circle"></i> Live</span>' : ' <span style="font-size:0.6rem;color:var(--text-secondary)">Est.</span>';
+    var urNote = d.realDr ? ' <span class="real-badge"><i class="fas fa-check-circle"></i> Live</span>' : ' <span style="font-size:0.6rem;color:var(--text-secondary)">Est.</span>';
+    var perfNote = d.realPerf ? ' <span class="real-badge"><i class="fas fa-check-circle"></i> Live</span>' : ' <span style="font-size:0.6rem;color:var(--text-secondary)">Est.</span>';
+    return (
+      '<div class="traffic-card"><div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px">' +
+        '<div><h3 style="margin:0"><i class="fas fa-globe" style="color:var(--accent)"></i> ' + domain + '</h3>' +
+        '<p style="font-size:0.8rem;color:var(--text-secondary)">Organic traffic of ' + domain + '</p></div>' +
+        '<span class="traffic-badge" style="background:' + (h ? '#e8f5e9;color:#2e7d32' : '#fff3e0;color:#e65100') + '">' +
+        (h ? 'High Traffic' : 'Low Traffic') + '</span></div>' +
+        '<div class="api-status" id="apiStatus"></div>' +
+        '<div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;margin:16px 0">' +
+          '<div class="traffic-metric"><div class="num" id="organicVal">' + formatNum(d.organicTraffic) + '</div><div class="lbl">Organic Traffic</div></div>' +
+          '<div class="traffic-metric"><div class="num">$' + formatNum(d.trafficValue) + '</div><div class="lbl">Traffic Value</div></div>' +
+          '<div class="traffic-metric"><div class="num" id="perfVal">' + d.perfScore + '%' + perfNote + '</div><div class="lbl">Performance</div></div>' +
+        '</div>' +
+        '<div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:16px">' +
+          '<div class="traffic-metric"><div class="num" id="drVal">' + d.dr + drNote + '</div><div class="lbl">Domain Rating</div></div>' +
+          '<div class="traffic-metric"><div class="num" id="urVal">' + d.ur + urNote + '</div><div class="lbl">URL Rating</div></div>' +
+        '</div>' +
+        '<div class="traffic-grid">' +
+          '<div class="traffic-metric"><div class="num" id="visitsVal">' + formatNum(d.monthlyVisits) + '</div><div class="lbl">Total Visits</div></div>' +
+          '<div class="traffic-metric"><div class="num" id="viewsVal">' + formatNum(d.pageViews) + '</div><div class="lbl">Page Views</div></div>' +
+          '<div class="traffic-metric"><div class="num">' + d.pagesPerVisit + '</div><div class="lbl">Pages/Visit</div></div>' +
+          '<div class="traffic-metric"><div class="num" id="bounceVal">' + d.bounceRate + '%</div><div class="lbl">Bounce Rate</div></div>' +
+        '</div></div>' +
+      '<div class="traffic-card"><h3><i class="fas fa-globe-americas" style="color:var(--accent)"></i> Top Countries</h3>' + ch + '</div>' +
+      '<div class="traffic-card"><h3><i class="fas fa-key" style="color:var(--accent)"></i> Top Keywords</h3>' +
+        '<div style="display:flex;justify-content:space-between;padding:6px 0;font-size:0.8rem;color:var(--text-secondary);border-bottom:1px solid var(--border)"><span>Keyword</span><span style="display:flex;gap:12px">Position<span>Volume</span></span></div>' +
+        kh + '</div>' +
+      '<div class="traffic-card"><h3><i class="fas fa-share-alt" style="color:var(--accent)"></i> Traffic Sources</h3>' + sh +
+      '<div class="traffic-stat"><span class="label">Pages Indexed</span><span class="value">' + formatNum(d.pagesIndexed) + '</span></div>' +
+      '<div class="traffic-stat"><span class="label" id="loadTimeLabel">FCP (Est.)</span><span class="value" id="loadTimeVal">' + d.loadTime + 's</span></div></div>'
+    );
+  }
+
+  function updateApiStatus(id, status, msg) {
+    var el = document.getElementById(id);
+    if (el) { el.className = 'api-status-item ' + status; el.innerHTML = msg; }
+  }
+
+  function updateMetrics() {
+    var m = [
+      {id:'visitsVal', v:formatNum(_data.monthlyVisits)},
+      {id:'viewsVal', v:formatNum(_data.pageViews)},
+      {id:'bounceVal', v:_data.bounceRate+'%'},
+      {id:'organicVal', v:formatNum(_data.organicTraffic)}
+    ];
+    m.forEach(function(x) { var e = document.getElementById(x.id); if (e) e.innerHTML = x.v; });
+  }
+
+  function fetchPageSpeed(domain) {
+    var sid = document.createElement('div');
+    sid.id = 'psStatus'; sid.className = 'api-status-item loading';
+    sid.innerHTML = '<i class="fas fa-spinner fa-spin"></i> PageSpeed...';
+    var c = document.getElementById('apiStatus');
+    if (c) c.appendChild(sid);
+    var xhr = new XMLHttpRequest();
+    xhr.open('GET', 'https://www.googleapis.com/pagespeedonline/v5/runPagespeed?url=https://' + domain + '&key=' + API_KEYS.pagespeed, true);
+    xhr.timeout = 15000;
+    xhr.onload = function() {
+      if (xhr.status === 200) {
+        try {
+          var r = JSON.parse(xhr.responseText);
+          var lh = r.lighthouseResult;
+          if (lh) {
+            var score = Math.round((lh.categories.performance.score || 0) * 100);
+            var fcp = (lh.audits['first-contentful-paint'] || {}).displayValue || '0s';
+            var lcp = (lh.audits['largest-contentful-paint'] || {}).displayValue || '0s';
+            var tbt = (lh.audits['total-blocking-time'] || {}).displayValue || '0ms';
+            _data = estimateTrafficData(domain, {
+              realDr: _data.realDr ? _data.dr : undefined,
+              realUr: _data.realUr ? _data.ur : undefined,
+              perfScore: score
+            });
+            _data.loadTime = fcp;
+            var ltEl = document.getElementById('loadTimeVal');
+            if (ltEl) ltEl.innerHTML = fcp + ' <span class="real-badge"><i class="fas fa-check-circle"></i> Google</span>';
+            var llEl = document.getElementById('loadTimeLabel');
+            if (llEl) llEl.innerHTML = 'FCP (Real)';
+            var pEl = document.getElementById('perfVal');
+            if (pEl) pEl.innerHTML = score + '% <span class="real-badge"><i class="fas fa-check-circle"></i> Live</span>';
+            updateMetrics();
+            updateApiStatus('psStatus', 'done', '<i class="fas fa-check-circle"></i> PSI: ' + score + '% (LCP ' + lcp + ')');
+          } else { updateApiStatus('psStatus', 'fail', 'PageSpeed: no result'); }
+        } catch(e) { updateApiStatus('psStatus', 'fail', 'PageSpeed: error'); }
+      } else { updateApiStatus('psStatus', 'fail', 'PageSpeed: ' + xhr.status); }
+    };
+    xhr.onerror = function() { updateApiStatus('psStatus', 'fail', 'PageSpeed: error'); };
+    xhr.ontimeout = function() { updateApiStatus('psStatus', 'fail', 'PageSpeed: timeout'); };
+    xhr.send();
+  }
+
+  function fetchOpenPageRank(domain) {
+    var sid = document.createElement('div');
+    sid.id = 'oprStatus'; sid.className = 'api-status-item loading';
+    sid.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Domain Rating...';
+    var c = document.getElementById('apiStatus');
+    if (c) c.appendChild(sid);
+    var xhr = new XMLHttpRequest();
+    xhr.open('GET', 'http://localhost:8001/opr?domain=' + domain, true);
+    xhr.timeout = 10000;
+    xhr.onload = function() {
+      if (xhr.status === 200) {
+        try {
+          var r = JSON.parse(xhr.responseText);
+          var resp = r.response && r.response[0];
+          if (resp && !resp.error && resp.page_rank_decimal > 0) {
+            var realDr = Math.min(100, Math.round(resp.page_rank_decimal * 10));
+            _data = estimateTrafficData(domain, {
+              realDr: realDr,
+              realUr: Math.min(100, Math.round(realDr * (0.5 + resp.page_rank_decimal / 20))),
+              perfScore: _data.realPerf ? _data.perfScore : undefined
+            });
+            var drEl = document.getElementById('drVal');
+            if (drEl) drEl.innerHTML = _data.dr + ' <span class="real-badge"><i class="fas fa-check-circle"></i> Live</span>';
+            var urEl = document.getElementById('urVal');
+            if (urEl) urEl.innerHTML = _data.ur + ' <span class="real-badge"><i class="fas fa-check-circle"></i> Live</span>';
+            updateMetrics();
+            updateApiStatus('oprStatus', 'done', '<i class="fas fa-check-circle"></i> DR: ' + _data.dr);
+          } else if (resp && resp.error && resp.error.indexOf('not found') > -1) {
+            updateApiStatus('oprStatus', 'fail', 'Domain not indexed in PageRank');
+          } else { updateApiStatus('oprStatus', 'fail', 'DR: ' + (resp ? resp.error : 'no data')); }
+        } catch(e) { updateApiStatus('oprStatus', 'fail', 'DR: error'); }
+      } else { updateApiStatus('oprStatus', 'fail', 'DR: ' + xhr.status); }
+    };
+    xhr.onerror = function() { updateApiStatus('oprStatus', 'fail', 'DR: proxy error'); };
+    xhr.ontimeout = function() { updateApiStatus('oprStatus', 'fail', 'DR: timeout'); };
+    xhr.send();
+  }
+
+  var _checking = false;
+  function checkTraffic() {
+    if (_checking) return;
+    var url = document.getElementById('trafficUrl').value.trim();
+    if (!url) { App.toast('Enter a URL'); return; }
+    var domain = url.replace(/https?:\/\//, '').replace(/\/.*$/, '').trim();
+    if (!domain) { App.toast('Invalid URL'); return; }
+    _checking = true;
+    var btn = document.querySelector('.btn-primary');
+    btn.disabled = true; btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Analyzing...';
+    _data = estimateTrafficData(domain);
+    var el = document.getElementById('trafficResult');
+    el.style.display = 'block';
+    el.innerHTML = renderCard(domain);
+    btn.disabled = false; btn.innerHTML = '<i class="fas fa-chart-line"></i> Analyze Traffic';
+    _checking = false;
+    if (typeof db !== 'undefined' && db) {
+      db.ref('analytics/tools/traffic_checker').transaction(function(v) { return (v || 0) + 1; });
+    }
+    App.toast('Analysis complete! Fetching live data...');
+    fetchPageSpeed(domain);
+    fetchOpenPageRank(domain);
+  }
+  </script>
+  <div class="girl-wrap" id="girlWrap">
+    <div class="girl-3d" id="girl3d">
+      <div class="girl-glow"></div>
+      <div class="girl-ring"></div>
+      <img class="girl-avatar" id="girlAvatar" src="https://i.ibb.co/4ZXZGR0v/magnific-character-design-sheet-cu-y6q-MDQAPW9.png" alt="Support">
+      <div class="girl-badge"><i class="fas fa-headset"></i></div>
+    </div>
+    <div class="girl-shadow"></div>
+  </div>
+  <div class="girl-speech" id="girlSpeech">
+    <div class="speech-msg" id="girlSpeechMsg">Hi! I'm Priya, your support assistant! 💁‍♀️</div>
+  </div>
+<script>if("serviceWorker"in navigator){navigator.serviceWorker.register("/SEO-Tools-Engine-Pro/sw.js")}</script></body>
+</html>

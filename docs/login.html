@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <link rel="stylesheet" href="assets/css/style.css">
+  <title>Sign In - SEO Agency Pro</title>
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-JL9JZTFZYH"></script>
+  <script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-JL9JZTFZYH');</script>
+  <meta name="description" content="Sign in to your SEO Agency Pro dashboard or create a free account. Access your projects, keywords, and SEO reports.">
+  <meta property="og:title" content="Sign In - SEO Agency Pro">
+  <meta property="og:description" content="Sign in to your SEO Agency Pro dashboard or create a free account. Access your projects, keywords, and SEO reports.">
+  <meta property="og:url" content="https://seotoolsengine.com/login.html">
+  <meta property="og:type" content="website">
+  <meta name="twitter:card" content="summary_large_image">
+  <link rel="canonical" href="https://seotoolsengine.com/login.html">
+  <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-auth.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-database.js"></script>
+  <script src="assets/js/firebase-config.js"></script>
+</head>
+<body>
+
+<div id="authLoader" class="dash-loader">
+  <div class="dash-loader-inner">
+    <div class="login-spinner"></div>
+    <h3>Checking Authentication</h3>
+    <p>Please wait...</p>
+  </div>
+</div>
+
+<div id="authPage" style="display:none;min-height:100vh;display:none;align-items:center;justify-content:center;padding:24px;background:var(--bg,#f8f9fa)">
+  <div class="login-card">
+    <div class="login-icon"><i class="fas fa-chart-line"></i></div>
+    <h2 class="login-title" id="authTitle">Welcome</h2>
+    <p class="login-sub" id="authSub">Sign in to your SEO Agency dashboard</p>
+
+    <div id="authLoaderBtn" style="display:none;text-align:center;padding:20px">
+      <div class="login-spinner"></div>
+      <p style="margin-top:12px;color:var(--text-secondary)" id="authLoaderText">Processing...</p>
+    </div>
+
+    <div id="authForm">
+      <div id="authTabs" style="display:flex;gap:0;margin-bottom:24px;border-radius:10px;overflow:hidden;border:1.5px solid var(--border)">
+        <button id="tabSignIn" class="auth-tab active" style="flex:1;padding:10px;border:none;cursor:pointer;font-weight:600;font-size:0.85rem;font-family:inherit;transition:all 0.2s">Sign In</button>
+        <button id="tabSignUp" class="auth-tab" style="flex:1;padding:10px;border:none;cursor:pointer;font-weight:500;font-size:0.85rem;font-family:inherit;transition:all 0.2s">Create Account</button>
+      </div>
+
+      <button class="google-btn" id="googleSignIn">
+        <svg viewBox="0 0 48 48" width="22" height="22"><path fill="#EA4335" d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.72 17.74 9.5 24 9.5z"/><path fill="#4285F4" d="M46.98 24.55c0-1.57-.15-3.09-.38-4.55H24v9.02h12.94c-.58 2.96-2.26 5.48-4.78 7.18l7.73 6c4.51-4.18 7.09-10.36 7.09-17.65z"/><path fill="#FBBC05" d="M10.53 28.59A14.5 14.5 0 0 1 9.5 24c0-1.59.28-3.14.76-4.59l-7.98-6.19A23.99 23.99 0 0 0 0 24c0 3.77.87 7.35 2.56 10.56l7.97-5.97z"/><path fill="#34A853" d="M24 48c6.48 0 11.93-2.13 15.89-5.81l-7.73-6c-2.15 1.45-4.92 2.3-8.16 2.3-6.26 0-11.57-4.22-13.47-9.91l-7.98 5.97C6.51 42.62 14.62 48 24 48z"/></svg>
+        Continue with Google
+      </button>
+
+      <p class="login-or">or</p>
+
+      <div style="display:flex;flex-direction:column;gap:10px">
+        <input type="email" id="authEmail" placeholder="Email address" class="auth-input">
+        <input type="password" id="authPass" placeholder="Password" class="auth-input">
+      </div>
+
+      <button class="btn btn-primary" id="authSubmitBtn" style="width:100%;margin-top:14px"><i class="fas fa-sign-in-alt"></i> <span id="authSubmitLabel">Sign In</span></button>
+
+      <p style="margin-top:12px;font-size:0.72rem;color:var(--text-secondary);text-align:center">
+        By continuing, you agree to our <a href="terms.html" style="color:var(--accent)">Terms</a> & <a href="privacy.html" style="color:var(--accent)">Privacy Policy</a>
+      </p>
+    </div>
+
+    <div id="authSuccess" style="display:none;text-align:center;padding:20px">
+      <i class="fas fa-check-circle" style="font-size:3rem;color:var(--success)"></i>
+      <p style="margin-top:12px;font-weight:600" id="authWelcome"></p>
+    </div>
+
+    <div id="authVerify" style="display:none;text-align:center;padding:20px">
+      <i class="fas fa-envelope" style="font-size:3rem;color:var(--warning)"></i>
+      <h3 style="margin-top:12px;font-size:1.1rem">Verify Your Email</h3>
+      <p style="margin-top:8px;color:var(--text-secondary);font-size:0.85rem">
+        We sent a verification email to<br><strong id="verifyEmail"></strong>.
+        Please check your inbox and click the link to activate your account.
+      </p>
+      <div style="margin-top:16px;display:flex;flex-direction:column;gap:8px">
+        <button class="btn btn-primary" id="resendVerifyBtn"><i class="fas fa-paper-plane"></i> Resend Verification</button>
+        <button class="btn btn-secondary" id="verifyGoLogin"><i class="fas fa-sign-in-alt"></i> Go to Sign In</button>
+      </div>
+      <p id="verifyStatus" style="margin-top:12px;font-size:0.8rem;color:var(--text-secondary);min-height:20px"></p>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+<script src="assets/js/main.js"></script>
+<script>
+(function() {
+  var loader = document.getElementById('authLoader');
+  var page = document.getElementById('authPage');
+
+  function toast(m) { var t=document.getElementById('toast'); if(!t)return; t.textContent=m; t.classList.add('show'); setTimeout(function(){t.classList.remove('show')},2500); }
+
+  function showPage() { loader.style.display = 'none'; page.style.display = 'flex'; }
+
+  function redirectAfterAuth(user) {
+    if (typeof db !== 'undefined' && db) {
+      db.ref('admin/emails').once('value').then(function(snap) {
+        var emails = snap.val() || {};
+        var isAdmin = Object.values(emails).indexOf(user.email) !== -1;
+        window.location.replace(isAdmin ? '/admin.html' : '/dashboard.html');
+      }).catch(function() { window.location.replace('/dashboard.html'); });
+    } else {
+      window.location.replace('/dashboard.html');
+    }
+  }
+
+  // Check if already logged in
+  if (typeof firebase !== 'undefined' && firebase.auth) {
+    var checked = false;
+    firebase.auth().onAuthStateChanged(function(user) {
+      if (user && !checked) {
+        checked = true;
+        var isGoogle = user.providerData && user.providerData.some(function(p) { return p.providerId === 'google.com'; });
+        if (isGoogle || user.emailVerified) {
+          redirectAfterAuth(user);
+        } else {
+          showPage();
+          toast('Please verify your email before accessing the dashboard.');
+        }
+        return;
+      }
+      if (!checked) { checked = true; showPage(); }
+    });
+    setTimeout(function() { if (!checked) { checked = true; showPage(); } }, 3000);
+  } else {
+    setTimeout(showPage, 500);
+  }
+
+  // Tab switching
+  var isSignIn = true;
+  var tabIn = document.getElementById('tabSignIn');
+  var tabUp = document.getElementById('tabSignUp');
+  var submitBtn = document.getElementById('authSubmitBtn');
+  var submitLabel = document.getElementById('authSubmitLabel');
+  var authTitle = document.getElementById('authTitle');
+  var authSub = document.getElementById('authSub');
+  var authForm = document.getElementById('authForm');
+  var authLoaderBtn = document.getElementById('authLoaderBtn');
+  var authLoaderText = document.getElementById('authLoaderText');
+  var authSuccess = document.getElementById('authSuccess');
+  var authWelcome = document.getElementById('authWelcome');
+  var emailInp = document.getElementById('authEmail');
+  var passInp = document.getElementById('authPass');
+
+  function setMode(signIn) {
+    isSignIn = signIn;
+    tabIn.className = 'auth-tab' + (signIn ? ' active' : '');
+    tabUp.className = 'auth-tab' + (signIn ? '' : ' active');
+    tabIn.style.background = signIn ? 'var(--accent,#ff1a5c)' : 'transparent';
+    tabIn.style.color = signIn ? '#fff' : 'var(--text-secondary)';
+    tabUp.style.background = signIn ? 'transparent' : 'var(--accent,#ff1a5c)';
+    tabUp.style.color = signIn ? 'var(--text-secondary)' : '#fff';
+    tabIn.style.fontWeight = signIn ? '600' : '500';
+    tabUp.style.fontWeight = signIn ? '500' : '600';
+    authTitle.textContent = signIn ? 'Welcome Back' : 'Join SEO Agency';
+    authSub.textContent = signIn ? 'Sign in to your dashboard' : 'Create your free account';
+    submitLabel.textContent = signIn ? 'Sign In' : 'Create Account';
+    submitBtn.innerHTML = '<i class="fas fa-' + (signIn ? 'sign-in-alt' : 'user-plus') + '"></i> <span id="authSubmitLabel">' + (signIn ? 'Sign In' : 'Create Account') + '</span>';
+  }
+  setMode(true);
+  tabIn.addEventListener('click', function() { setMode(true); });
+  tabUp.addEventListener('click', function() { setMode(false); });
+
+  function showForm() { authForm.style.display = 'block'; authLoaderBtn.style.display = 'none'; authSuccess.style.display = 'none'; }
+  function showLoading(text) { authForm.style.display = 'none'; authLoaderBtn.style.display = 'block'; authLoaderText.textContent = text || 'Processing...'; }
+
+  // ─── Verify Email UI ───
+  var authVerify = document.getElementById('authVerify');
+  var verifyEmail = document.getElementById('verifyEmail');
+  var verifyStatus = document.getElementById('verifyStatus');
+
+  function showVerify(email) {
+    authForm.style.display = 'none';
+    authLoaderBtn.style.display = 'none';
+    authSuccess.style.display = 'none';
+    authVerify.style.display = 'block';
+    verifyEmail.textContent = email;
+    verifyStatus.textContent = '';
+  }
+
+  function showForm() { authForm.style.display = 'block'; authLoaderBtn.style.display = 'none'; authSuccess.style.display = 'none'; authVerify.style.display = 'none'; }
+
+  function resendVerification() {
+    var curUser = firebase.auth().currentUser;
+    if (!curUser) { toast('No user session. Please sign in again.'); return; }
+    verifyStatus.textContent = 'Sending...';
+    curUser.sendEmailVerification().then(function() {
+      verifyStatus.textContent = 'Verification email sent! Check your inbox.';
+      toast('Verification email sent!');
+    }).catch(function(e) {
+      verifyStatus.textContent = e.message || 'Failed to send. Try again.';
+      toast(e.message || 'Failed to send verification email.');
+    });
+  }
+
+  document.getElementById('resendVerifyBtn').addEventListener('click', resendVerification);
+  document.getElementById('verifyGoLogin').addEventListener('click', function() {
+    authVerify.style.display = 'none';
+    setMode(true);
+    showForm();
+  });
+
+  // ─── Check email verified on sign-in ───
+  function checkVerifiedAndRedirect(user) {
+    // Google accounts are pre-verified
+    var isGoogle = user.providerData && user.providerData.some(function(p) { return p.providerId === 'google.com'; });
+    if (isGoogle || user.emailVerified) {
+      redirectAfterAuth(user);
+      return true;
+    }
+    // Not verified — sign out and show warning
+    firebase.auth().signOut().catch(function(){});
+    showForm();
+    toast('Please verify your email before signing in. Check your inbox.');
+    showVerify(user.email);
+    verifyStatus.textContent = 'Please check your email and click the verification link, then sign in.';
+    return false;
+  }
+
+  // Google
+  document.getElementById('googleSignIn').addEventListener('click', function() {
+    if (typeof firebase === 'undefined' || !firebase.auth) { toast('Firebase not loaded.'); return; }
+    showLoading('Connecting to Google...');
+    firebase.auth().signInWithPopup(new firebase.auth.GoogleAuthProvider())
+      .then(function(r) { redirectAfterAuth(r.user); })
+      .catch(function(e) { showForm(); toast(e.message || 'Google sign-in failed.'); });
+  });
+
+  // Email submit
+  submitBtn.addEventListener('click', function() {
+    var email = emailInp.value.trim();
+    var pass = passInp.value;
+    if (!email || !pass) { toast('Enter email and password.'); return; }
+    if (!isSignIn && pass.length < 6) { toast('Password must be at least 6 characters.'); return; }
+
+    if (isSignIn) {
+      // ─── SIGN IN ───
+      showLoading('Signing in...');
+      firebase.auth().signInWithEmailAndPassword(email, pass)
+        .then(function(r) { checkVerifiedAndRedirect(r.user); })
+        .catch(function(e) { showForm(); toast(e.message); });
+    } else {
+      // ─── SIGN UP ───
+      showLoading('Creating account...');
+      firebase.auth().createUserWithEmailAndPassword(email, pass)
+        .then(function(r) {
+          var user = r.user;
+          user.sendEmailVerification().then(function() {
+            showVerify(email);
+          }).catch(function() {
+            showVerify(email);
+          });
+        })
+        .catch(function(e) { showForm(); toast(e.message); });
+    }
+  });
+
+  passInp.addEventListener('keypress', function(e) { if (e.key === 'Enter') submitBtn.click(); });
+})();
+</script>
+<script>if("serviceWorker"in navigator){navigator.serviceWorker.register("/SEO-Tools-Engine-Pro/sw.js")}</script></body>
+</html>

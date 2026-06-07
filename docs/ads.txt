@@ -1,0 +1,5 @@
+# Adsterra
+adsterra.com, YOUR_ADSTERRA_PUBLISHER_ID, DIRECT, YOUR_ADSTERRA_ACCOUNT_ID
+
+# PropellerAds
+propellerads.com, YOUR_PROPELERADS_ZONE_ID, DIRECT
